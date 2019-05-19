@@ -1,14 +1,21 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">SimpleCMS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div id="navbarNavDropdown" class="navbar-collapse collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <?php
+                    if (basename(getcwd())=='admin'){
+                        echo'<a class="nav-link" href="../">Domů</a>';
+                    } else {
+                        echo'<a class="nav-link" href="./">Domů</a>';
+
+                    }
+                    ?>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -19,7 +26,8 @@
                       <?php echo htmlspecialchars($_SESSION['user_name']) ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Odhlásit</a>
+                        <a class="dropdown-item" href="logout.php">Odhlásit</a>
+                        <?php include 'admin/admin_menu.php'; ?>
                     </div>
                 </li>
                 <?php }else{ ?>

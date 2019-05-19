@@ -20,13 +20,13 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
 	<meta charset="utf-8" />
 	<title>CMS - Role Management</title>
 	
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	
+	<?php include '../assets/styles.php'; ?>
 </head>
 
 <body>
+    <?php include '../navbar.php'; ?>
 	<div class="col-sm-2">
-		<?php include './admin_menu.php'; ?>
+		
 	</div>
 	<div class="col-sm-10">
 	<h1>Administrace uživatelů</h1>
@@ -39,16 +39,16 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
         foreach ($users as $user){
             echo '<tr>';
         	echo '<td>' . htmlspecialchars($user['id']) . '</td>';
-        	echo '<td>' . htmlspecialchars($user['user']) . '</td>'; 
+        	echo '<td>' . htmlspecialchars($user['name']) . '</td>'; 
         	echo '<td>' . htmlspecialchars($user['email']) . '</td>';
-        	echo '<td><a href="user_delete.php" id="' . htmlspecialchars($user['id']) . '" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['user']) . '\')">Smazat</a></td>';
+        	echo '<td><a href="user_delete.php" id="' . htmlspecialchars($user['id']) . '" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['name']) . '\')">Smazat</a></td>';
         	echo '</tr>';
 
             
         }
         echo '</table>';    
     ?>
-</div>
+</div><?php include '../assets/scripts.php'; ?>
 		</body>
 
 		</html>

@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 			$_SESSION['user_id'] = $existing_user["id"];
 			$_SESSION['user_name'] = $existing_user["name"];
+			$_SESSION['user_role'] = $existing_user["role"];
 
 			header('Location: index.php');
 	

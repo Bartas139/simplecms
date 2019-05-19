@@ -2,7 +2,7 @@
 
 session_start();
 
-require 'db.php';
+require '/assets/db.php';
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
@@ -36,12 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 	#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
 	
-	$stmt = $db->prepare("SELECT id FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
+	$stmt = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
 	$stmt->execute(array($email));
-	$user_id = (int)$stmt->fetchColumn();
+	$user = $query->fetchALL(PDO::FETCH_ASSOC);
 			
-	$_SESSION['user_id'] = $user_id;
-	$_SESSION['user_name'] = $name;
+	$_SESSION['user_id'] = $user['id'];
+	$_SESSION['user_name'] = $name['name'];
+	$_SESSION['user_role'] = $role['role'];
 		
 	header('Location: index.php');
 	

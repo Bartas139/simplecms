@@ -31,6 +31,4 @@ function perm($perm, $current_id){
 			return (1);
 		}
 	}
-
-
 }
