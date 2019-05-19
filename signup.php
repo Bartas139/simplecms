@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	$nick = $_POST['nick'];
+	$name = $_POST['nick'];
 	
 	# TODO PRO STUDENTY osetrit vstupy, email a heslo jsou povinne, atd.
 	# TODO PRO STUDENTY jde se prihlasit prazdnym heslem, jen prototyp, pouzit filtry
@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$hashed = password_hash($password, PASSWORD_DEFAULT);
 	
 	#vlozime usera do databaze
-	$stmt = $db->prepare("INSERT INTO users(user, email, password) VALUES (?, ?, ?)");
-	$stmt->execute(array($nick, $email, $hashed));
+	$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?)");
+	$stmt->execute(array($name, $email, $hashed));
 	
 	#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
 	
@@ -53,10 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
 	<meta charset="utf-8" />
 	<title>PHP Shopping App</title>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-	<link rel="stylesheet" href="styles.css">
+	<?php include 'assets/styles.php'; ?>
 </head>
 
 <body>
@@ -113,8 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </div> 
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+<?php include 'assets/scripts.php'; ?>
 </body>
 
 </html>
