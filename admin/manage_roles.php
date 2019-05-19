@@ -134,7 +134,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
         		echo '<div class="card-body">Tato role má všechna oprávnění a nelze ji měnit</div></div>';
         	} else {
         		echo '<div class="card adminrole"><div class="card-header"><h2 id="' . htmlspecialchars($role["name"]) . '">'. htmlspecialchars($role["name"]) .'</h2></div>';
-        		echo '<div class="card-body"><form method="post">';
+        		echo '<form method="post"><div class="card-body">';
         		echo '<input type="hidden" name="action" value="update" />';
         		echo '<input type="hidden" name="role" value="'.$role["id"].'" />';
         		echo '<input type="hidden" name="rolename" value="'.htmlspecialchars($role["name"]).'" />';
@@ -146,8 +146,8 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	        	echo '<h3>Aktuální oprávnění </h3>';
 	        	foreach ($permissions as $permission){
 	        		echo '<div class="custom-control custom-checkbox mb-3">';
-		            echo '<input class="custom-control-input" id="'. $permission["id"] .'" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" checked />';
-		            echo '<label class="custom-control-label" for="'.$permission["id"].'" >'.htmlspecialchars($permission["description"]).'</label>';
+		            echo '<input class="custom-control-input" id="'. $permission["id"] . $role["id"] .'" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" checked />';
+		            echo '<label class="custom-control-label" for="'.$permission["id"].  $role["id"] .'" >'.htmlspecialchars($permission["description"]).'</label>';
 		            echo '</div>';
 	        	}
 	        	
@@ -157,8 +157,8 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	        	echo '<h3>Dostupná oprávnění </h3>';
 	        	foreach ($permissions as $permission){
 		            echo '<div class="custom-control custom-checkbox mb-3">';
-		            echo '<input class="custom-control-input" id="'. $permission["id"] .'" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" />';
-		            echo '<label class="custom-control-label" for="'.$permission["id"].'" >'.htmlspecialchars($permission["description"]).'</label>';
+		            echo '<input class="custom-control-input" id="'. $permission["id"] . $role["id"] . '" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" />';
+		            echo '<label class="custom-control-label" for="'.$permission["id"]. $role["id"] .'" >'.htmlspecialchars($permission["description"]).'</label>';
 		            echo '</div>';
 	        		}
 	        	echo '</div><div class="card-footer"><input type="submit" value="Uložit" class="btn btn-primary send"/>';
@@ -170,9 +170,9 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
             
         }    
     ?>
-<div class="card adminrole"><div class="card-header"><h2>Vytvořit novou roli</h2></div><div class="card-body">
+<div class="card adminrole"><div class="card-header"><h2>Vytvořit novou roli</h2></div>
 <form method="post">
-                    
+   <div class="card-body">                 
       <input type="hidden" name="action" value="create" />
                    
                     <div class="form-group">
@@ -186,7 +186,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 						        	echo '<br />Dostupná oprávnění <br />';
 						        	foreach ($permissions as $permission){
 						        		echo '<div class="custom-control custom-checkbox mb-3">';
-							            echo '<input class="custom-control-input" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" />';
+							            echo '<input class="custom-control-input" id="'. $permission["id"] .'" type="checkbox" value="' . $permission["id"] . '" name="checkbox[]" />';
 							            echo '<label class="custom-control-label" for="'.$permission["id"].'" >'.htmlspecialchars($permission["description"]).'</label>';
 							            echo '</div>';
 						        		}
@@ -194,9 +194,10 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
                 </div><div class="card-footer">
                     <div class="form-group">
                         <input type="submit" value="Vytvořit" class="btn btn-primary send"/>
+                    </div>
                     </div>    
                 </form>
-</div></div>
+</div>
         </div>
 
 </div>

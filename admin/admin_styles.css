@@ -5,3 +5,24 @@
 .send{
 	margin-right: 5px; 
 }
+
+
+.tile {  
+  width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	background: #0074D9 ;		
+	padding: 20px;
+	margin-top: 10px;
+	color: white;
+	text-align: center;
+  }
+
+.tile:hover{
+	color: #7FDBFF ;
+}
+
+ .title{
+   	
+   	font-size: 50px;
+   }
