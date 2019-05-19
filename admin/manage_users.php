@@ -18,30 +18,49 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
 
 <head>
 	<meta charset="utf-8" />
-	<title>CMS - Role Management</title>
+	<title>CMS - Administrace uživatelů</title>
 	
 	<?php include '../assets/styles.php'; ?>
 </head>
 
 <body>
     <?php include '../navbar.php'; ?>
-	<div class="col-sm-2">
-		
-	</div>
-	<div class="col-sm-10">
+	<div class="container">
 	<h1>Administrace uživatelů</h1>
 
 	<?php
         $query = $db->prepare('SELECT * FROM users');
         $query->execute();
         $users = $query->fetchALL(PDO::FETCH_ASSOC);
-        echo '<table>';
+
+        
+        ?>
+        <table class="table table-striped">
+        <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nick</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Zaregistrován</th>
+                <th>Akce</th>
+              </tr>
+            </thead>
+            <?php
         foreach ($users as $user){
+            $query = $db->prepare('SELECT name FROM roles WHERE id=?');
+            $query->execute(array($user['role']));
+            $role = $query->fetchColumn();
+
             echo '<tr>';
-        	echo '<td>' . htmlspecialchars($user['id']) . '</td>';
+        	echo '<td>' . $user['id'] . '</td>';
         	echo '<td>' . htmlspecialchars($user['name']) . '</td>'; 
         	echo '<td>' . htmlspecialchars($user['email']) . '</td>';
-        	echo '<td><a href="user_delete.php" id="' . htmlspecialchars($user['id']) . '" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['name']) . '\')">Smazat</a></td>';
+            echo '<td>' . htmlspecialchars($role) . '</td>';
+            echo '<td>' . $user['registred'] . '</td>';
+        	echo '<td><a href="delete_user.php?id='. $user["id"].'" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['name']) . '\')">Smazat</a>
+                    <a href="#">Upravit</a>
+            </td>';
         	echo '</tr>';
 
             

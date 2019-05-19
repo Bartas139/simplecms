@@ -112,7 +112,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 
 <head>
 	<meta charset="utf-8" />
-	<title>CMS - Role Management</title>
+	<title>CMS - Administrace rolí</title>
 	
 	<?php include '../assets/styles.php'; ?>
 	
