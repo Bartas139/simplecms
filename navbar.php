@@ -26,16 +26,36 @@
                       <?php echo htmlspecialchars($_SESSION['user_name']) ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="logout.php">Odhlásit</a>
+                        <?php
+                        if (basename(getcwd())=='admin'){
+                                        echo '<a class="dropdown-item" href="../logout.php">Odhlásit</a>';
+                                    } else {
+                                        echo '<a class="dropdown-item" href="logout.php">Odhlásit</a>';
+                                    }
+                        ?>
+
                         <?php include 'admin/admin_menu.php'; ?>
                     </div>
                 </li>
                 <?php }else{ ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="signin.php">Přihlásit</a>
+                    <?php
+                    if (basename(getcwd())=='admin'){
+                                    echo '<a class="nav-link" href="../signin.php">Přihlásit</a>';
+                                } else {
+                                    echo '<a class="nav-link" href="signin.php">Přihlásit</a>';
+                                }
+                    ?>
+                    
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="signup.php">Registrovat</a>
+                    <?php
+                    if (basename(getcwd())=='admin'){
+                                    echo '<a class="nav-link" href="../signup.php">Registrovat</a>';
+                                } else {
+                                    echo '<a class="nav-link" href="signup.php">Registrovat</a>';
+                                }
+                    ?>
                 </li><?php }
         ?>
             </ul>

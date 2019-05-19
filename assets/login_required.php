@@ -8,9 +8,18 @@ session_start();
 
 if(!isset($_SESSION["user_id"])){
 
-	header('Location: signin.php');
+          if (basename(getcwd())=='admin'){
+                                        header('Location: ../signin.php');
+
+									die();
+                                    } else {
+                                        header('Location: signin.php');
 
 	die();
+                                    }
+
+
+	
 
 }
 
@@ -31,8 +40,15 @@ if (!$current_user){
 
 	session_destroy();
 
-	header('Location: index.php');
+	if (basename(getcwd())=='admin'){
+                                        header('Location: ../signin.php');
+
+									die();
+                                    } else {
+                                        header('Location: signin.php');
 
 	die();
+                                    }
+
 
 }
