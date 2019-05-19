@@ -2,7 +2,7 @@
 
 session_start();
 
-require 'db.php';
+require '/assets/db.php';
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
@@ -12,13 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		# zajimavost: mysql porovnani retezcu je case insensitive, pokud dame select na NECO@DOMENA.COM, najde to i zaznam neco@domena.com
 		# viz http://dev.mysql.com/doc/refman/5.0/en/case-sensitivity.html
 		
-		$stmt = $db->prepare("SELECT * FROM users WHERE user = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
+		$stmt = $db->prepare("SELECT * FROM users WHERE name = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
 		$stmt->execute(array($email));
 		$existing_user = @$stmt->fetchAll()[0];
 	
 		if(password_verify($password, $existing_user["password"])){
 	
 			$_SESSION['user_id'] = $existing_user["id"];
+			$_SESSION['user_name'] = $existing_user["name"];
 
 			header('Location: index.php');
 	

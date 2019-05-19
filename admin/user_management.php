@@ -1,11 +1,11 @@
 <?php
 # pripojeni do db
-require 'db.php';
+require '../assets/db.php';
 
 # pristup jen pro prihlaseneho uzivatele
-require 'login_required.php';
+require '../assets/login_required.php';
 # pristup jen s perm manage_role
-require 'check_perm.php';
+require '../assets/check_perm.php';
 
 //Pro pristup je potrebné opravnení manage_roles
 $access = perm ('manage_users', $_SESSION['user_id']);

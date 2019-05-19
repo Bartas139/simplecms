@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$user_id = (int)$stmt->fetchColumn();
 			
 	$_SESSION['user_id'] = $user_id;
+	$_SESSION['user_name'] = $name;
 		
 	header('Location: index.php');
 	

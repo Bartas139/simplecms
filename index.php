@@ -1,9 +1,8 @@
 <?php
-# pripojeni do db
-require 'db.php';
 
-# pristup jen pro prihlaseneho uzivatele
-require 'login_required.php';
+session_start();
+# pripojeni do db
+require '/assets/db.php';
 
 ?><!DOCTYPE html>
 
@@ -11,16 +10,17 @@ require 'login_required.php';
 
 <head>
 	<meta charset="utf-8" />
-	<title>PHP Shopping App</title>
+	<title>SimpleCMS</title>
 	
-	<link rel="stylesheet" type="text/css" href="styles.css">
+	<?php include 'assets/styles.php'; ?>
 	
 </head>
+<?php include 'navbar.php'; ?>
 
 <body>
 	
-	AHOJ
 
+<?php include 'assets/scripts.php'; ?>
 		</body>
 
 		</html>
