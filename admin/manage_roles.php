@@ -122,6 +122,16 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	<?php include '../navbar.php'; ?>
 	<div class="container">
 	<h1>Administrace rolí a přístupů</h1>
+	<ul class="nav nav-tabs admin-nav">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="pill" href="#page1">Editace rolí</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#page2">Vytvořit novou roli</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+        <div id="page1" class="tab-pane active">
 	<?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
 	<?php
         $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
@@ -138,7 +148,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
         		echo '<input type="hidden" name="action" value="update" />';
         		echo '<input type="hidden" name="role" value="'.$role["id"].'" />';
         		echo '<input type="hidden" name="rolename" value="'.htmlspecialchars($role["name"]).'" />';
-				echo '<div class="form-group"><label for="name" >Upravte, pokud nechcete upravit název role:</label>';
+				echo '<div class="form-group"><label for="name" >Upravte, pokud chcete upravit název role:</label>';
         		echo '<input class="form-control" type="text" id="name" name="name" value="'.htmlspecialchars($role["name"]).'" /></div>';
 	            $query = $db->prepare('SELECT permissions.id, permissions.name, permissions.description FROM Permissions RIGHT JOIN role_perm ON permissions.id=role_perm.perm_id WHERE (role_perm.role_id=?)');
 	        	$query->execute(array($role["id"]));
@@ -170,6 +180,8 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
             
         }    
     ?>
+</div>
+<div id="page2" class="tab-pane">
 <div class="card adminrole"><div class="card-header"><h2>Vytvořit novou roli</h2></div>
 <form method="post">
    <div class="card-body">                 
@@ -201,6 +213,9 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
         </div>
 
 </div>
+</div>
+
+
 <?php include '../assets/scripts.php'; ?>
 		</body>
 

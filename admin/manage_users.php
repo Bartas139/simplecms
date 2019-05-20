@@ -65,7 +65,20 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
 <body>
     <?php include '../navbar.php'; ?>
 	<div class="container">
-	<h1>Administrace uživatelů</h1>
+        <h1>Administrace uživatelů</h1>
+        <ul class="nav nav-tabs admin-nav">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="pill" href="#page1">Seznam uživatelů</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#page2">Vytvořit nového uživatele</a>
+          </li>
+        </ul>
+        
+        <div class="tab-content">
+        <div id="page1" class="tab-pane active">
+
+	<h2>Výpis uživatelů</h2>
     <?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
 	<?php
         $query = $db->prepare('SELECT * FROM users');
@@ -89,14 +102,14 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
         foreach ($users as $user){
             $query = $db->prepare('SELECT name FROM roles WHERE id=?');
             $query->execute(array($user['role']));
-            $role = $query->fetchColumn();
+            $currentrole = $query->fetchColumn();
 
             echo '<tr>';
         	echo '<td>' . $user['id'] . '</td>';
         	echo '<td>' . htmlspecialchars($user['name']) . '</td>'; 
         	echo '<td>' . htmlspecialchars($user['email']) . '</td>';
-            echo '<td>' . htmlspecialchars($role) . '</td>';
-            echo '<td>' . $user['registred'] . '</td>';
+            echo '<td>' . htmlspecialchars($currentrole) . '</td>';
+            echo '<td>' . date( 'd.m.Y H:i:s', strtotime($user['registred']) ) . '</td>';
         	echo '<td><a href="delete_user.php?id='. $user["id"].'" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['name']) . '\')">Smazat</a>
                     <a href="#edit'.$user['id'].'" data-toggle="collapse">Upravit</a>
             </td>';
@@ -114,7 +127,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
                                 $roles = $query->fetchALL(PDO::FETCH_ASSOC);
 
                                 foreach ($roles as $role){
-                                    if ($role["name"]==$user['role']){
+                                    if ($role["name"]==$currentrole){
                                     echo '<option selected value="'.$role["id"].'">'. $role["name"].'</option>';
                                     }
                                     else {
@@ -123,7 +136,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
                                 }    
                             ?>
                         </select></td>
-                        <td><input type="text" name="registred" id="registred" class="form-control" value="<?php echo htmlspecialchars($user['registred']) ?>" readonly /></td>
+                        <td><input type="text" name="registred" id="registred" class="form-control" value="<?php echo date( 'd.m.Y H:i:s', strtotime($user['registred']) ) ?>" readonly /></td>
                         <td><input type="submit" value="Uložit" class="btn btn-primary send"/></td>
                 </form>    
             </tr> 
@@ -133,6 +146,10 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
         }
         echo '</table>';    
     ?>
+</div>
+<div id="page2" class="tab-pane">
+    <h2>Nový uživatel</h2>
+    </div></div>
 </div><?php include '../assets/scripts.php'; ?>
 		</body>
 
