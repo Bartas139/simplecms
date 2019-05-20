@@ -11,16 +11,4 @@
 			} else {
 				echo'<a href="admin/index.php" class="dropdown-item">Administrační sekce</a>';
 			}
-	foreach ($permissions as $perm){
-		if ($perm['admin_menu_item']==1){
-			if (basename(getcwd())=='admin'){
-				echo '<a href="'.$perm['name'].'.php" class="dropdown-item">'.$perm['description'].'</a>';
-			} else {
-				echo '<a href="admin/'.$perm['name'].'.php" class="dropdown-item">'.$perm['description'].'</a>';
-			}
-			
-		}
-	}
-
-
 ?>

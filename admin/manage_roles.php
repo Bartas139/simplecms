@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 # pripojeni do db
 require '../assets/db.php';
 
