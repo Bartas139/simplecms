@@ -39,7 +39,7 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
     if ($perm['admin_menu_item']==1){ ?>
             <div class="col-sm-4">
               <a href="<?php echo $perm['name'] ?>.php" class="tile">
-                <h3 class="title"><?php echo $perm['icon'] ?></h3>
+                <span class="title"><?php echo $perm['icon'] ?> </span>
                 <p><?php echo htmlspecialchars($perm['description']) ?></p>
               </a>
             </div> <?php

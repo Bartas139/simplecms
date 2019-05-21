@@ -111,46 +111,102 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
             echo '<td>' . htmlspecialchars($currentrole) . '</td>';
             echo '<td>' . date( 'd.m.Y H:i:s', strtotime($user['registred']) ) . '</td>';
         	echo '<td><a href="delete_user.php?id='. $user["id"].'" onclick="return confirm(\'Přejete si smazat uživatele ' . htmlspecialchars($user['name']) . '\')">Smazat</a>
-                    <a href="#edit'.$user['id'].'" data-toggle="collapse">Upravit</a>
+                    <a href="#edit'.$user['id'].'" data-toggle="modal">Upravit</a>
             </td>';
-        	echo '</tr>'; ?>
-            <tr id="edit<?php echo $user["id"] ?>" class="collapse out">
-                <form method="post">
-                        <input type="hidden" name="action" value="edit" />
-                        <td><input type="text" name="id" id="id" class="form-control" value="<?php echo htmlspecialchars($user['id']) ?>" readonly /></td>
-                        <td><input type="text" name="name" id="name" class="form-control" value="<?php echo htmlspecialchars($user['name']) ?>" required /></td>
-                        <td><input type="text" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars($user['email']) ?>" required /></td>
-                        <td><select class="form-control" id="role" name="role" required>
-                        <?php
-                                $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
-                                $query->execute();
-                                $roles = $query->fetchALL(PDO::FETCH_ASSOC);
-
-                                foreach ($roles as $role){
-                                    if ($role["name"]==$currentrole){
-                                    echo '<option selected value="'.$role["id"].'">'. $role["name"].'</option>';
-                                    }
-                                    else {
-                                    echo '<option value="'.$role["id"].'">'. $role["name"].'</option>';  
-                                    }
-                                }    
-                            ?>
-                        </select></td>
-                        <td><input type="text" name="registred" id="registred" class="form-control" value="<?php echo date( 'd.m.Y H:i:s', strtotime($user['registred']) ) ?>" readonly /></td>
-                        <td><input type="submit" value="Uložit" class="btn btn-primary send"/></td>
-                </form>    
-            </tr> 
-            <?php
-
-            
+        	echo '</tr>'; 
         }
-        echo '</table>';    
+        echo '</table>'; 
+
+        //Počet rolí v databázi, kvůli option size --> validita HTML
+        $query = $db->prepare('SELECT COUNT(name) FROM roles');
+        $query->execute();
+        $rolecount = $query->fetchColumn();
+
+        foreach ($users as $user){
+            $query = $db->prepare('SELECT name FROM roles WHERE id=?');
+            $query->execute(array($user['role']));
+            $currentrole = $query->fetchColumn();
+
+            ?>
+                    <div id="edit<?php echo $user["id"] ?>" class="modal fade">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">Upravit uživatele: <?php echo htmlspecialchars($user['name']); ?></h4>
+                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <form method="post">
+                                            <input type="hidden" name="action" value="edit" />
+                                            <label for="id<?php echo $user['id']; ?>">ID uživatele (nelze editovat)</label>
+                                            <input type="text" name="id" id="id<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['id']) ?>" readonly />
+                                            <label for="name<?php echo $user['id']; ?>">Jméno uživatele</label>
+                                            <input type="text" name="name" id="name<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['name']) ?>" required />
+                                            <label for="email<?php echo $user['id']; ?>">Email uživatele</label>
+                                            <input type="text" name="email" id="email<?php echo $user['id']; ?>" class="form-control" value="<?php echo htmlspecialchars($user['email']) ?>" required />
+                                            <label for="role<?php echo $user['id']; ?>">Role uživatele</label>
+                                            <select class="form-control" id="role<?php echo $user['id']; ?>" name="role" size="<?php echo $rolecount; ?>" required>
+                                            <?php
+                                                    $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
+                                                    $query->execute();
+                                                    $roles = $query->fetchALL(PDO::FETCH_ASSOC);
+
+                                                    foreach ($roles as $role){
+                                                        if ($role["name"]==$currentrole){
+                                                        echo '<option selected value="'.$role["id"].'">'. $role["name"].'</option>';
+                                                        }
+                                                        else {
+                                                        echo '<option value="'.$role["id"].'">'. $role["name"].'</option>';  
+                                                        }
+                                                    }    
+                                                ?>
+                                            </select>
+                                            <label for="registred<?php echo $user['id']; ?>">Uživatel registrován</label>
+                                            <input type="text" name="registred" id="registred<?php echo $user['id']; ?>" class="form-control" value="<?php echo date( 'd.m.Y H:i:s', strtotime($user['registred']) ) ?>" readonly />
+                                            <input type="submit" value="Uložit" class="btn btn-primary send"/>
+                                    </form>
+                                </div>    
+                            </div>    
+                        </div>
+                    </div>
+            <?php
+        }   
     ?>
 </div>
-<div id="page2" class="tab-pane">
-    <h2>Nový uživatel</h2>
-    </div></div>
-</div><?php include '../assets/scripts.php'; ?>
+        <div id="page2" class="tab-pane">
+            <h2>Nový uživatel</h2>
+            <form method="post">
+                                            <input type="hidden" name="action" value="create" />
+                                            <label for="name">Jméno uživatele</label>
+                                            <input type="text" name="name" id="name" class="form-control" value="<?php echo htmlspecialchars(@$_POST['name']) ?>" required />
+                                            <label for="email">Email uživatele</label>
+                                            <input type="text" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars(@$_POST['email']) ?>" required />
+                                            <label for="role">Role uživatele</label>
+                                            <select class="form-control" id="role" name="role" size="<?php echo $rolecount; ?>" required>
+                                            <?php
+                                                    $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
+                                                    $query->execute();
+                                                    $roles = $query->fetchALL(PDO::FETCH_ASSOC);
+
+                                                    foreach ($roles as $role){
+                                                        echo '<option value="'.$role["id"].'">'. $role["name"].'</option>';  
+                                                    }    
+                                                ?>
+                                            </select>
+                                            <label for="role">Heslo uživatele</label>
+                                            <input type="password" name="password" id="password" class="form-control" value="" required />
+                                            <input type="submit" value="Uložit" class="btn btn-primary send"/>
+                                    </form>
+        </div>
+    </div>
+</div>
+<?php include '../assets/scripts.php'; ?>
 		</body>
 
 		</html>
+
+
+
+
+
+
