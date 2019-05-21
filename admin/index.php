@@ -19,7 +19,7 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
 
 <head>
 	<meta charset="utf-8" />
-	<title>SimpleCMS</title>
+	<title>SimpleCMS - Administrace</title>
 	
 	<?php include '../assets/styles.php'; ?>
 	
@@ -56,4 +56,3 @@ if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto s
 		</body>
 
 		</html>
-

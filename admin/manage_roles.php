@@ -73,12 +73,12 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 		$_POST['checkbox'] = [];
 	}
 	//Oveření chyb
-	if (empty($_POST['name'])){
+	if (empty($_POST['addname'])){
 		$errors.="Kategorie musí mít název<br />";
 	}
 
 	$query = $db->prepare('SELECT name FROM roles WHERE name=? LIMIT 1');
-	$query->execute(array($_POST["name"]));
+	$query->execute(array($_POST["addname"]));
 	$roleexist = $query->fetchColumn();
 	if (!empty($roleexist)){
 		$errors.="Kategorie s názvem: ".$roleexist.", již existuje<br />";
@@ -87,11 +87,11 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	if (empty($errors)){
 		//vložení role
 		$query = $db->prepare('INSERT INTO roles (name) VALUES (?)');
-		$query->execute(array($_POST["name"]));
+		$query->execute(array($_POST["addname"]));
 
 		//získání ID role, přes role name (přes last inserted nebezpečné)
 		$query = $db->prepare('SELECT id FROM Roles WHERE name=? LIMIT 1');
-		$query->execute(array($_POST["name"]));
+		$query->execute(array($_POST["addname"]));
 		$newid = $query->fetchColumn();
 
 		//Vložení vybraných do databáze
@@ -174,7 +174,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	        	echo '</div><div class="card-footer"><input type="submit" value="Uložit" class="btn btn-primary send"/>';
 	        	echo '<a role="button" class="btn btn-primary send" href="delete_role.php?id='. $role["id"].'" onclick="return confirm(\'Přejete si smazat roli ' . htmlspecialchars($role['name']) . '\')">Smazat</a>';
 
-	        	echo '</form></div></div>';	
+	        	echo '</div></form></div>';	
         		}
 
             
@@ -188,8 +188,8 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
       <input type="hidden" name="action" value="create" />
                    
                     <div class="form-group">
-                        <label for="name">Název</label>
-                        <input type="text" name="name" id="name" class="form-control" value="<?php echo htmlspecialchars(@$_POST['name']) ?>" required />
+                        <label for="addname">Název</label>
+                        <input type="text" name="addname" id="addname" class="form-control" value="<?php echo htmlspecialchars(@$_POST['addname']) ?>" required />
                     </div>
                     <?php
 					$query = $db->prepare('SELECT * from Permissions');
