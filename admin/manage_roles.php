@@ -9,7 +9,7 @@ require '../assets/login_required.php';
 require '../assets/check_perm.php';
 
 //Pro pristup je potrebné opravnení manage_roles
-$access = perm ('manage_roles', $_SESSION['user_id']);
+$access = perm ('manage_roles', $_SESSION['user_role']);
 
 if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto stránku');}
 
@@ -132,7 +132,17 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
         </ul>
         <div class="tab-content">
         <div id="page1" class="tab-pane active">
+        	<h2>Editace rolí</h2>
+        	<form>
+		        <div class="form-group input-group">
+		            <div class="input-group-prepend">
+		                <span class="input-group-text"><i class="fas fa-search"></i></span>
+		            </div>
+		            <input type="text" class="form-control" placeholder="Vyhledat roli" oninput="w3.filterHTML('#roles', '.adminrole', this.value)">
+		        </div>
+		    </form>
 	<?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
+	<div id="roles">
 	<?php
         $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
         $query->execute();
@@ -180,6 +190,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
             
         }    
     ?>
+</div>
 </div>
 <div id="page2" class="tab-pane">
 <div class="card adminrole"><div class="card-header"><h2>Vytvořit novou roli</h2></div>

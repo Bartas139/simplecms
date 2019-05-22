@@ -9,7 +9,7 @@ require '../assets/login_required.php';
 require '../assets/check_perm.php';
 
 //Pro pristup je potrebné opravnení manage_roles
-$access = perm ('manage_users', $_SESSION['user_id']);
+$access = perm ('manage_users', $_SESSION['user_role']);
 
 if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto stránku');}
 //update uživatele
@@ -114,6 +114,14 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
         <div id="page1" class="tab-pane active">
 
 	<h2>Výpis uživatelů</h2>
+    <form>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" placeholder="Zadejte termín, který chcete vyhledat v tabulce uživatelů" oninput="w3.filterHTML('#list', '.searchrow', this.value)">
+        </div>
+    </form>
 	<?php
         $query = $db->prepare('SELECT * FROM users');
         $query->execute();
@@ -121,14 +129,14 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
 
         
         ?>
-        <table class="table table-striped">
-        <thead>
+        <table id="list" class="table table-striped">
+        <thead class="thead-dark">
               <tr>
-                <th>ID</th>
-                <th>Nick</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Zaregistrován</th>
+                <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(1)')" style="cursor:pointer">ID <i class="fas fa-sort-down"></i></th>
+                <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(2)')" style="cursor:pointer">Nick <i class="fas fa-sort-down"></i></th>
+                <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(3)')" style="cursor:pointer">Email <i class="fas fa-sort-down"></i></th>
+                <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(4)')" style="cursor:pointer">Role <i class="fas fa-sort-down"></i></th>
+                <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(5)')" style="cursor:pointer">Zaregistrován <i class="fas fa-sort-down"></i></th>
                 <th>Akce</th>
               </tr>
             </thead>
@@ -138,7 +146,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
             $query->execute(array($user['role']));
             $currentrole = $query->fetchColumn();
 
-            echo '<tr>';
+            echo '<tr class="searchrow">';
         	echo '<td>' . $user['id'] . '</td>';
         	echo '<td>' . htmlspecialchars($user['name']) . '</td>'; 
         	echo '<td>' . htmlspecialchars($user['email']) . '</td>';

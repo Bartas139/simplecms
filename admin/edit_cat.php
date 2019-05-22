@@ -9,7 +9,7 @@ require '../assets/login_required.php';
 require '../assets/check_perm.php';
 
 //Pro pristup je potrebné opravnení manage_roles
-$access = perm ('manage_users', $_SESSION['user_id']);
+$access = perm ('manage_users', $_SESSION['user_role']);
 
 if ($access == 0){die ('Chyba  403: Nemáte oprávnění pro přístup na tuto stránku');}
 //update uživatele
