@@ -2,3 +2,6 @@
 <link rel="stylesheet" type="text/css" href="styles.css">
 <link rel="stylesheet" type="text/css" href="admin_styles.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ywkhpwowowayd8oa38hdkmmpyxvl43sgtxhzss3uukoiarn1"></script> 

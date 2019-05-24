@@ -92,6 +92,15 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
         <div id="page1" class="tab-pane active">
 
 	<h2>Výpis kategorií</h2>
+<form>
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control" placeholder="Zadejte termín, který chcete vyhledat v tabulce kategorií" oninput="w3.filterHTML('#list', '.searchrow', this.value)">
+        </div>
+    </form>
+
 	<?php
         $query = $db->prepare('SELECT id, name, description FROM categories');
         $query->execute();
@@ -99,8 +108,8 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
 
         
         ?>
-        <table class="table table-striped">
-        <thead>
+        <table id="list" class="table table-striped">
+        <thead class="thead-dark">
               <tr>
                 <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(1)')" style="cursor:pointer">ID <i class="fas fa-sort-down"></i></th>
                 <th onclick="w3.sortHTML('#list', '.searchrow', 'td:nth-child(2)')" style="cursor:pointer">Název <i class="fas fa-sort-down"></i></th>
