@@ -36,15 +36,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 	#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
 	
-	$stmt = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
-	$stmt->execute(array($email));
-	$user = $query->fetchALL(PDO::FETCH_ASSOC);
-			
+	$query = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
+	$query->execute(array($email));
+	$user = $query->fetch(PDO::FETCH_ASSOC);
+	
 	$_SESSION['user_id'] = $user['id'];
-	$_SESSION['user_name'] = $name['name'];
-	$_SESSION['user_role'] = $role['role'];
-		
-	header('Location: index.php');
+	$_SESSION['user_name'] = $user['name'];
+	$_SESSION['user_role'] = $user['role'];
+	header('Location: index.php');		
 	
 }
 
@@ -54,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
 	<meta charset="utf-8" />
-	<title>PHP Shopping App</title>
+	<title>Simple CMS - Registrace</title>
 	<?php include 'assets/styles.php'; ?>
 </head>
 
@@ -77,14 +76,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			<div class="input-group-prepend">
 		    	<span class="input-group-text"> <i class="fa fa-user"></i> </span>
 		 	</div>
-        	<input name="nick" class="form-control" placeholder="Uživatelské jméno" type="text">
+        	<input name="nick" class="form-control" placeholder="Uživatelské jméno" type="text" value="<?php echo htmlspecialchars(@$_POST['nick']) ?>">
     	</div> <!-- form-group// -->
     
     	<div class="form-group input-group">
     		<div class="input-group-prepend">
 		    	<span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
 		 	</div>
-        	<input name="email" class="form-control" placeholder="Emailová adresa" type="email">
+        	<input name="email" class="form-control" placeholder="Emailová adresa" type="email" value="<?php echo htmlspecialchars(@$_POST['email']) ?>">
     	</div> <!-- form-group// -->
     
 	    <div class="form-group input-group">

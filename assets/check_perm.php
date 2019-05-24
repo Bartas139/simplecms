@@ -5,7 +5,11 @@
 function perm($perm, $current_role){
 	require 'db.php';
 
-	if ($current_role == 'SuperAdmin') {
+	$query = $db->prepare('SELECT name FROM roles WHERE id=? LIMIT 1');
+    $query->execute(array($current_role));
+    $role_name = $query->fetchColumn();
+
+	if ($role_name == 'SuperAdmin') {
 		$result = 1;
 	} else {
 

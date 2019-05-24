@@ -3,7 +3,7 @@
 session_start();
 # pripojeni do db
 require '/assets/db.php';
-
+require '/assets/check_perm.php';
 ?><!DOCTYPE html>
 
 <html>
