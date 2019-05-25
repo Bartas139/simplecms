@@ -4,6 +4,15 @@ session_start();
 # pripojeni do db
 require '/assets/db.php';
 require '/assets/check_perm.php';
+
+if (isset($_GET['offset'])) {
+	$offset = (int)$_GET['offset'];
+} else {
+	$offset = 0;
+}
+
+$postonpage = 3;
+
 ?><!DOCTYPE html>
 
 <html>
@@ -18,13 +27,24 @@ require '/assets/check_perm.php';
 
 
 <body>
-<?php include 'navbar.php'; ?>	
+<?php include 'navbar.php'; ?>
+<header class="d-flex align-items-center">
+	<div class="container">
+		<h1>SimpleCMS</h1>
+		<p>Základní CMS vytvořeno v rámci kurzu 4iz278</p>
+	</div>
+</header>	
 <div class="container">
-	<h1>Poslední příspěvky</h1>
+	<h2>Poslední příspěvky</h2>
+	
 	<?php
-        $query = $db->prepare('SELECT id, title, content, thumb_img, author, category, published, read_count FROM posts');
+		$count = $db->query("SELECT COUNT(id) FROM posts")->fetchColumn();
+
+        $query = $db->prepare('SELECT id, title, content, thumb_img, author, category, published, read_count FROM posts ORDER BY published DESC LIMIT 3 OFFSET ?');
+        $query->bindValue(1, $offset, PDO::PARAM_INT);
         $query->execute();
         $posts = $query->fetchALL(PDO::FETCH_ASSOC);
+        $html_row = 0;
         foreach ($posts as $post) {
         	$query = $db->prepare('SELECT name FROM users WHERE id=?');
         	$query->execute(array($post['author']));
@@ -32,22 +52,56 @@ require '/assets/check_perm.php';
         	$query = $db->prepare('SELECT name FROM categories WHERE id=?');
         	$query->execute(array($post['category']));
         	$category = $query->fetchColumn();
+        	
+        	if (($html_row % 3) == 0) {echo '<div class="row">';}
+        	$html_row =  $html_row + 1;
         	?>
-        	<div class="card">
-			  	<div class="card-header"><h2><?php echo htmlspecialchars($post['title']) ?></h2></div>
-			  	<div class="card-body"><?php echo ($post['content']) ?></div>
-			  	<div class="card-footer">
-			  		<span class="col">Autor: <?php echo htmlspecialchars($author) ?></span>
-			  		<span class="col">Kategorie: <?php echo htmlspecialchars($category) ?></span>
-			  		<span class="col">Publikováno: <?php echo '<span class="col">' . date( 'd.m.Y H:i:s', strtotime($post['published'])) . '</span>' ?>
-			  		<span class="col">Zobrazení: <?php echo htmlspecialchars($post['read_count']) ?></span>
-			  	</div>
+        	<div class="col-sm-4 py-2">
+	        	<article class="card post h-100">
+				  	<div class="post-header">
+				  		<a href="#post"><img class="card-img-top thumbnail" <?php
+				  			if (empty($post['thumb_img'])){
+				  				echo 'src="uploads/thumbs/default.png"';	
+				  			} else {
+				  				echo 'src="uploads/thumbs/' . $post['thumb_img'] .'"';
+				  			}
+				  			echo 'alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
+				  			?>></a>
+				  		<div class="post-category"><a href="#category"><?php echo htmlspecialchars($category) ?></a></div>
+				  	</div>
+				  	<div class="card-body">
+				  		<h3 class="post-title"><a href=""><?php echo htmlspecialchars($post['title']) ?></a></h3>
+				  		<div class="post-meta">
+                            <ul>
+                                <li><?php echo htmlspecialchars($author) ?></li>
+                                <li><?php echo date( 'd.m.Y H:i:s', strtotime($post['published'])) ?></li>
+                                <li><i class="fas fa-eye"></i> <?php echo htmlspecialchars($post['read_count']) ?> <i class="fas fa-comments"></i> 0</li>
+                            </ul>
+                        </div>
+				  		<div class="post-excerp">
+				  		<?php
+				  			echo substr($post['content'], 0, 1000) . '...<br />';
+				  		?>	
+				  		</div>
+				  		<a href="" class="post-read">Číst víc</a>
+				  	</div>
+				</article>
 			</div>
-        	<?php	
+        	<?php
+        	if (($html_row % 3) == 0) {echo '</div>';}
+
         }
+        if (($html_row % 3) != 0) {echo '</div>';}
 	?>
+
+		<ul class="pagination justify-content-center" style="margin:20px 0">
+	  		<?php for($i=1; $i<=ceil($count/$postonpage); $i++) { ?>
+	  			<li class="page-item <?= $offset/$postonpage+1==$i ? "active" : ""  ?>"><a class="page-link" href="index.php?offset=<?= ($i-1)*$postonpage ?>"><?= $i ?></a></li>	
+	  		<?php } ?>
+		</ul>
+
 </div>
-	
+
 <?php include 'assets/scripts.php'; ?>
 		</body>
 

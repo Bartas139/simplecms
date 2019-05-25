@@ -100,19 +100,20 @@ if (isset($_POST['delimg'])){
                 $query->execute();
                 $images = $query->fetchALL(PDO::FETCH_COLUMN, 0);
                 $uniq = false;
-                $newname = uniqid('thumb_');
+                $newname = uniqid('thumb_'); //generace nového jména
+                $file_ext = substr(basename($_FILES["fileToUpload"]["name"]), strripos(basename($_FILES["fileToUpload"]["name"]), '.')); //přípona souboru pomocí substringu
+                $newname .= $file_ext; //připojení přípony ke jménu
+                //ověřen, že je opravdu unikátní
                 while ($uniq==false){
                    if (in_array($newname, $images)){
                         $newname = uniqid('thumb_');
+                        $newname .= $file_ext;
                    } else {
                         $uniq = true;
+                        $target_file = $target_dir . $newname; 
                    }
                 }
-
-                //přejmenování souboru
-                $file_ext = substr(basename($_FILES["fileToUpload"]["name"]), strripos(basename($_FILES["fileToUpload"]["name"]), '.'));
-                $newname .= $file_ext;
-                $target_file = $target_dir . $newname; 
+              
 
                 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 // pomocí getimagesize zjistíme jestli je to opravdu img
