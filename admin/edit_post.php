@@ -128,8 +128,8 @@ if (isset($_POST['delimg'])){
                     $errors.= "Soubor již existuje <br />";
                 }
                 // Ověření velikosti
-                if ($_FILES["fileToUpload"]["size"] > 2000000) {
-                    $errors.= "Maximální velikost obrázku jsou 2MB<br />";
+                if ($_FILES["fileToUpload"]["size"] > 5000000) {
+                    $errors.= "Maximální velikost obrázku je 5MB<br />";
                 }
                 // Omezení formátu
                 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
@@ -212,8 +212,8 @@ if($_FILES['fileToUpload']['size'] > 0) {
                 $errors.= "Soubor již existuje <br />";
             }
             // Ověření velikosti
-            if ($_FILES["fileToUpload"]["size"] > 2000000) {
-                $errors.= "Maximální velikost obrázku jsou 2MB<br />";
+            if ($_FILES["fileToUpload"]["size"] > 5000000) {
+                $errors.= "Maximální velikost obrázku je 5MB<br />";
             }
             // Omezení formátu
             if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"

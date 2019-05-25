@@ -80,10 +80,10 @@ $postonpage = 3;
                         </div>
 				  		<div class="post-excerp">
 				  		<?php
-				  			echo substr($post['content'], 0, 1000) . '...<br />';
+				  			echo strip_tags(implode(' ', array_slice(explode(' ', $post['content']), 0, 80))) . '...<br />';
 				  		?>	
 				  		</div>
-				  		<a href="" class="post-read">Číst víc</a>
+				  		<a href="#" class="post-read">Číst víc</a>
 				  	</div>
 				</article>
 			</div>
