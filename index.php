@@ -61,9 +61,9 @@ $postonpage = 3;
 				  	<div class="post-header">
 				  		<a href="#post"><img class="card-img-top thumbnail" <?php
 				  			if (empty($post['thumb_img'])){
-				  				echo 'src="uploads/thumbs/default.png"';	
+				  				echo 'src="'.BASE_PATH.'/uploads/thumbs/default.png"';	
 				  			} else {
-				  				echo 'src="uploads/thumbs/' . $post['thumb_img'] .'"';
+				  				echo 'src="'.BASE_PATH.'/uploads/thumbs/' . $post['thumb_img'] .'"';
 				  			}
 				  			echo 'alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
 				  			?>></a>
