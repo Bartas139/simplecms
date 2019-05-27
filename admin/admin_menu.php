@@ -4,11 +4,6 @@
 
 	if ($access==1){
 		echo '<div class="dropdown-divider"></div>';
-		if (basename(getcwd())=='admin'){
-				echo'<a href="./" class="dropdown-item">Administrační sekce</a>';
-			} else {
-				echo'<a href="admin/index.php" class="dropdown-item">Administrační sekce</a>';
-			}
+		echo'<a href="'.BASE_PATH.'/admin/" class="dropdown-item">Administrační sekce</a>';
 	}
 	
-?>

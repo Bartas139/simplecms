@@ -3,8 +3,7 @@
 
 
 function perm($perm, $current_role){
-	require 'db.php';
-
+	global $db;
 	$query = $db->prepare('SELECT name FROM roles WHERE id=? LIMIT 1');
     $query->execute(array($current_role));
     $role_name = $query->fetchColumn();

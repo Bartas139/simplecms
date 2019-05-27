@@ -2,8 +2,8 @@
 
 session_start();
 # pripojeni do db
-require '/assets/db.php';
-require '/assets/check_perm.php';
+require 'assets/db.php';
+require 'assets/check_perm.php';
 
 if (isset($_GET['offset'])) {
 	$offset = (int)$_GET['offset'];
@@ -74,7 +74,14 @@ $postonpage = 3;
 				  		<div class="post-meta">
                             <ul>
                                 <li><?php echo htmlspecialchars($author) ?></li>
-                                <li><?php echo date( 'd.m.Y H:i:s', strtotime($post['published'])) ?></li>
+                                <li><?php
+                                	if (date("d.m.Y") == date( 'd.m.Y', strtotime($post['published']))){
+                                		echo 'Dnes v ' . date( 'H:i:s', strtotime($post['published']));
+                                	} else {
+                                		echo date( 'd.m.Y H:i:s', strtotime($post['published']));
+                                	}
+                                	
+                                ?></li>
                                 <li><i class="fas fa-eye"></i> <?php echo htmlspecialchars($post['read_count']) ?> <i class="fas fa-comments"></i> 0</li>
                             </ul>
                         </div>
