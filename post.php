@@ -2,8 +2,8 @@
 
 session_start();
 # pripojeni do db
-require '/assets/db.php';
-require '/assets/check_perm.php';
+require 'assets/db.php';
+require 'assets/check_perm.php';
 
 if (!isset($_GET['id'])) {
     header('Location: ./');

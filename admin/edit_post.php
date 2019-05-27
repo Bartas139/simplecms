@@ -417,7 +417,7 @@ if($_FILES['fileToUpload']['size'] > 0) {
                                                         <input type="checkbox" class="custom-control-input" id="delimg" name="delimg">
                                                         <label class="custom-control-label" for="delimg">Smazat obrázek? <span id="yes">Obrázek bude smazán</span><span id="no">Obrázek bude zachován</span></label>
                                                     </div>
-                                                    <?php if(!empty($post['thumb_img'])){ ?><img class="img-fluid" id="current-post-img" src="../uploads/thumbs/<?php echo $post['thumb_img'] ?>" alt="Aktuální obrázek pro příspěvěk id: <?php echo $post['id'] ?>"><?php } ?>
+                                                    <?php if(!empty($post['thumb_img'])){ ?><img class="img-fluid" id="current-post-img" src="<?php echo BASE_PATH.'/uploads/thumbs/'.$post['thumb_img'] ?>" alt="Aktuální obrázek pro příspěvěk id: <?php echo $post['id'] ?>"><?php } ?>
                                                     
                                                     <div id="upload" <?php if(!empty($post['thumb_img'])){echo 'style="display: none"';} ?>>
                                                         <label for="fileToUpload">Nahrát nový obrázek</label>

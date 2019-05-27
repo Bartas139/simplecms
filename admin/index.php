@@ -5,7 +5,7 @@ session_start();
 require '../assets/db.php';
 
 # pristup jen pro prihlaseneho uzivatele
-require_once (BASE_PATH.'/assets/login_required.php');
+require_once ('../assets/login_required.php');
 # pristup jen s perm manage_role
 require '../assets/check_perm.php';
 //Pro pristup je potrebné opravnení manage_roles

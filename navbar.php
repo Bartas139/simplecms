@@ -27,11 +27,8 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <?php
-                        if (basename(getcwd())=='admin'){
-                                        echo '<a class="dropdown-item" href="../logout.php">Odhlásit</a>';
-                                    } else {
-                                        echo '<a class="dropdown-item" href="logout.php">Odhlásit</a>';
-                                    }
+                                        echo '<a class="dropdown-item" href="'.BASE_PATH.'/logout.php">Odhlásit</a>';
+
                         ?>
 
                         <?php include 'admin/admin_menu.php'; ?>
@@ -40,21 +37,15 @@
                 <?php }else{ ?>
                 <li class="nav-item">
                     <?php
-                    if (basename(getcwd())=='admin'){
-                                    echo '<a class="nav-link" href="../signin.php">Přihlásit</a>';
-                                } else {
-                                    echo '<a class="nav-link" href="signin.php">Přihlásit</a>';
-                                }
+                                    echo '<a class="nav-link" href="'.BASE_PATH.'/signin.php">Přihlásit</a>';
+
                     ?>
                     
                 </li>
                 <li class="nav-item">
                     <?php
-                    if (basename(getcwd())=='admin'){
-                                    echo '<a class="nav-link" href="../signup.php">Registrovat</a>';
-                                } else {
-                                    echo '<a class="nav-link" href="signup.php">Registrovat</a>';
-                                }
+                                    echo '<a class="nav-link" href="'.BASE_PATH.'/signup.php">Registrovat</a>';
+
                     ?>
                 </li><?php }
         ?>

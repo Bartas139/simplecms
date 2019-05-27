@@ -2,7 +2,7 @@
 
 session_start();
 
-require '/assets/db.php';
+require 'assets/db.php';
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
