@@ -130,3 +130,8 @@ header {
   .sign-form article{
     width: 375px;
  }
+
+ .deleted-user {
+    font-size: 0.75rem;
+    color: #AAAAAA;
+ }

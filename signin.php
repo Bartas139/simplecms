@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$stmt = $db->prepare("SELECT * FROM users WHERE name = ? OR email = ? LIMIT 1");
 		$stmt->execute(array($email, $email));
 		$existing_user = @$stmt->fetchAll()[0];
-	
+	$error = "";
 		if(password_verify($password, $existing_user["password"])){
 	
 			$_SESSION['user_id'] = $existing_user["id"];
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 		} else {
 	
-			$error = 'Nesprávné přihlašovací údaje';
+			$error .= 'Nesprávné přihlašovací údaje';
 	
 		}		
 	
@@ -47,7 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 <?php include 'navbar.php'; ?>
+<?php echo (!empty($error)?'<div class="alert alert-danger"><strong>'.$error.'</strong></div>':'');?>
 <div class="container full-screen d-flex">
+	
 	<div class="mx-auto card bg-light justify-content-center align-self-center sign-form">
 		<article class="card-body mx-auto">
 			<h4 class="card-title mt-3 text-center">Přihlášení</h4>

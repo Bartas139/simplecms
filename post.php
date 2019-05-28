@@ -166,7 +166,7 @@ function deep_level_comments ($id, $response) {
                 <i class="fas fa-user" style="width:60px;"></i>
               
               <div class="media-body">
-                <h4><?php echo htmlspecialchars($comment['name']); ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
+                <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo 'Tento uživatel byl smazán';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
                 <?php
                 if(isset($_SESSION["user_id"])){
                     $access = perm ('manage_comments', $_SESSION['user_role']);
@@ -188,7 +188,7 @@ function deep_level_comments ($id, $response) {
 function comments ($id) {
     global $db;
     
-    $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to IS NULL');
+    $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to IS NULL');
     $query->execute(array($id));
     $comments = $query->fetchALL(PDO::FETCH_ASSOC);
     foreach ($comments as $comment) {
@@ -197,7 +197,7 @@ function comments ($id) {
                 <i class="fas fa-user" style="width:60px;"></i>
               
               <div class="media-body">
-                <h4><?php echo htmlspecialchars($comment['name']); ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
+                <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo '<span class="deleted-user">Tento uživatel byl smazán</span>';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
                 <?php
                 if(isset($_SESSION["user_id"])){
                     $access = perm ('manage_comments', $_SESSION['user_role']);
