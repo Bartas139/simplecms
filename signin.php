@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$password = $_POST['password'];
 	
 			
-		$stmt = $db->prepare("SELECT * FROM users WHERE name = ? LIMIT 1");
-		$stmt->execute(array($email));
+		$stmt = $db->prepare("SELECT * FROM users WHERE name = ? OR email = ? LIMIT 1");
+		$stmt->execute(array($email, $email));
 		$existing_user = @$stmt->fetchAll()[0];
 	
 		if(password_verify($password, $existing_user["password"])){

@@ -270,7 +270,7 @@ function comments ($id) {
                     echo $response['content'];                 
                 }    
             ?>
-            <?php if(isset($_SESSION["user_id"])){ ?>
+            <?php if(!empty($_SESSION["user_id"])){ ?>
             <form method="post">
                 <?php
                     if (!isset($_GET['action']) && !isset($_GET['comment'])){

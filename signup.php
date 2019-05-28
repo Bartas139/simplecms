@@ -3,50 +3,87 @@
 session_start();
 
 require 'assets/db.php';
+require_once __DIR__ . '/assets/php-graph-sdk-5.x/src/Facebook/autoload.php';
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-	$name = $_POST['nick'];
-	
-	# TODO PRO STUDENTY osetrit vstupy, email a heslo jsou povinne, atd.
-	# TODO PRO STUDENTY jde se prihlasit prazdnym heslem, jen prototyp, pouzit filtry
 
-	# $password = md5($_POST['password']); #chybi salt
+	$errors = "";
+	if (empty($_POST['nick'])){
+		$errors .= "Jméno je povinné<br />";	
+	}
+	if (strlen($_POST["nick"]) < '4') {
+            $errors .= "Jméno musí mít alespoň 4 znaky<br />";
+        }
+	if (empty($_POST['email'])){
+		$errors .= "Email je povinný<br />";	
+	}
+	if (!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+        $errors.="Zadej platný email<br />";
+    }
 	
-	# $password = hash("sha256" , $password); #chybi salt
 	
-	# viz http://php.net/manual/en/function.password-hash.php
-	# salt lze generovat rucne (nedoporuceno), nebo to nechat na php, ktere salt rovnou pridat do hashovaneho hesla
+		if (empty($_POST['password'])){
+		$errors .= "Heslo je  povinné<br />";	
+		}
+		if (strlen($_POST["password"]) < '8') {
+            $errors .= "Heslo musí mít minimálně 8 znaků<br />";
+        }
+        if(!preg_match("#[0-9]+#",$_POST["password"])) {
+            $errors .= "Heslo musí obsahovat minimálně jednu číslici<br />";
+        }
+        if(!preg_match("#[A-Z]+#",$_POST["password"])) {
+            $errors .= "Heslo musí obsahovat minimálně jedno velké písmeno<br />";
+        }
+        if(!preg_match("#[a-z]+#",$_POST["password"])) {
+            $errors .= "Heslo musí obsahovat minimálně jedno malé písmeno<br />";
+        }
+	if ($_POST['password']!=$_POST['checkpassword']){
+		$errors .= "Hesla se neshodují<br />";	
+	}
+
+	$query = $db->prepare('SELECT name, email FROM users WHERE (name=? OR email=?) LIMIT 1');
+    $query->execute(array($_POST["nick"],$_POST["email"]));
+    $userexist = $query->fetch(PDO::FETCH_ASSOC);
 	
-	/**
-	 * We just want to hash our password using the current DEFAULT algorithm.
-	 * This is presently BCRYPT, and will produce a 60 character result.
-	 *
-	 * Beware that DEFAULT may change over time, so you would want to prepare
-	 * By allowing your storage to expand past 60 characters (255 would be good)
-	 */
-	# dalsi moznosti je vynutit bcrypt: PASSWORD_BCRYPT
-	$hashed = password_hash($password, PASSWORD_DEFAULT);
+    if ($userexist["name"]==$_POST["nick"]) {
+            $errors.="Uživatel s tímto jménem již existuje<br />";
+        } 
+        if ($userexist["email"]==$_POST["email"]) {
+            $errors.="Uživatel s tímto emailem již existuje<br />";
+        }
 	
-	#vlozime usera do databaze
-	$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?)");
-	$stmt->execute(array($name, $email, $hashed));
-	
-	#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
-	
-	$query = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
-	$query->execute(array($email));
-	$user = $query->fetch(PDO::FETCH_ASSOC);
-	
-	$_SESSION['user_id'] = $user['id'];
-	$_SESSION['user_name'] = $user['name'];
-	$_SESSION['user_role'] = $user['role'];
-	header('Location: index.php');		
-	
+	if (empty($errors)){
+		//bcrypt: PASSWORD_BCRYPT
+		$hashed = password_hash($_POST['password'], PASSWORD_DEFAULT);
+		
+		#vlozime usera do databaze
+		$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?)");
+		$stmt->execute(array($_POST['nick'], $_POST['email'], $hashed));
+		
+		#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
+		
+		$query = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1"); //limit 1 jen jako vykonnostni optimalizace, 2 stejne maily se v db nepotkaji
+		$query->execute(array($_POST['email']));
+		$user = $query->fetch(PDO::FETCH_ASSOC);
+		
+		$_SESSION['user_id'] = $user['id'];
+		$_SESSION['user_name'] = $user['name'];
+		$_SESSION['user_role'] = $user['role'];
+		header('Location: index.php');
+	}
 }
 
+$fb = new Facebook\Facebook([
+  'app_id' => '2422157794674442', // Replace {app-id} with your app id
+  'app_secret' => 'b5f88c5a0a4dd23eba95dd98413cee9e',
+  'default_graph_version' => 'v3.2',
+  ]);
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['email'];
+$loginUrl = $helper->getLoginUrl('https://eso.vse.cz/~cham09/cms/assets/fb_callback.php', $permissions);
+	
 ?><!DOCTYPE html>
 
 <html>
@@ -58,14 +95,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-<?php include 'navbar.php'; ?>	
+<?php include 'navbar.php'; ?>
+<?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
 <div class="container full-screen d-flex">
 	<div class="mx-auto card bg-light justify-content-center align-self-center sign-form">
 		<article class="card-body mx-auto">
 			<h4 class="card-title mt-3 text-center">Registrace</h4>
 			<p class="text-center">Začněte vytvořením svého účtu</p>
 			<p>
-				<a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Registrovat přes Facebook</a>
+				<a href="<?php echo htmlspecialchars($loginUrl) ?>" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Registrovat přes Facebook</a>
 			</p>
 			<p class="divider-text">
         		<span class="bg-light">Nebo</span>
