@@ -58,10 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-	
-<div class="container">
-	<div class="card bg-light">
-		<article class="card-body mx-auto" style="max-width: 400px;">
+<?php include 'navbar.php'; ?>	
+<div class="container full-screen d-flex">
+	<div class="mx-auto card bg-light justify-content-center align-self-center sign-form">
+		<article class="card-body mx-auto">
 			<h4 class="card-title mt-3 text-center">Registrace</h4>
 			<p class="text-center">Začněte vytvořením svého účtu</p>
 			<p>

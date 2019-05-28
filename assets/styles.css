@@ -90,3 +90,43 @@ header {
     margin-bottom: 20px;
 }
 
+.single-post-header a{
+    text-decoration: none;
+    color: white;
+}
+
+.single-post-img{
+    height: 175px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.single-post-aside h2{
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+
+}
+
+.single-post-aside-panel{
+    margin-bottom: 15px;
+    padding-left: 15px;
+    border-left: 1px solid grey;
+
+}
+
+.single-post-comment{
+    border-left: 1px solid grey;
+    margin-bottom: 10px;
+}
+ .full-screen{
+    height: 70vh;
+ }
+
+ .sign-form{
+    width: 500px;
+ }
+
+  .sign-form article{
+    width: 375px;
+ }

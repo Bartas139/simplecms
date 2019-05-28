@@ -2,19 +2,8 @@
 
 if(!isset($_SESSION["user_id"])){
 
-          if (basename(getcwd())=='admin'){
-                                        header('Location: ../signin.php');
-
-									die();
-                                    } else {
-                                        header('Location: signin.php');
-
-	die();
-                                    }
-
-
-	
-
+    header('Location: '.BASE_PATH.'/signin.php');
+    die();
 }
 
 
@@ -34,15 +23,8 @@ if (!$current_user){
 
 	session_destroy();
 
-	if (basename(getcwd())=='admin'){
-                                        header('Location: ../signin.php');
-
-									die();
-                                    } else {
-                                        header('Location: signin.php');
-
-	die();
-                                    }
+	header('Location: '.BASE_PATH.'/signin.php');
+    die();
 
 
 }
