@@ -135,3 +135,42 @@ header {
     font-size: 0.75rem;
     color: #AAAAAA;
  }
+
+ /* admin styles */
+ .adminrole{
+    margin-bottom: 20px;
+}
+
+.send{
+    margin-right: 5px; 
+}
+
+
+.tile {  
+  width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    background: #0074D9 ;       
+    padding: 20px;
+    margin-top: 10px;
+    color: white;
+    text-align: center;
+  }
+
+.tile:hover{
+    color: #7FDBFF ;
+}
+
+ .title{
+    
+    font-size: 50px;
+   }
+
+.admin-nav{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#yes {
+    display: none;
+}

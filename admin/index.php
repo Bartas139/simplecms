@@ -5,7 +5,7 @@ session_start();
 require '../assets/db.php';
 
 # pristup jen pro prihlaseneho uzivatele
-require_once ('../assets/login_required.php');
+require_once '../assets/login_required.php';
 # pristup jen s perm manage_role
 require '../assets/check_perm.php';
 //Pro pristup je potrebné opravnení manage_roles
@@ -32,6 +32,12 @@ if ($access == 0){
 
 <body>
 <?php include '../navbar.php'; ?>
+<header class="d-flex align-items-center">
+	<div class="container">
+		<h1>Administrační sekce</h1>
+		<p>Zobrazují se všechny části administrace ke kterým máte oprávnění přistupovat</p>
+	</div>
+</header>	
 <div class="container">	
 <div class="row">
 <?php
@@ -40,7 +46,7 @@ if ($access == 0){
 	$permissions = $query->fetchALL(PDO::FETCH_ASSOC);
 
 	 foreach ($permissions as $perm){
-    if ($perm['admin_menu_item']==1){ ?>
+    if ($perm['admin_menu_item']==1 && perm ($perm['name'], $_SESSION['user_role']) == 1){ ?>
             <div class="col-sm-4">
               <a href="<?php echo $perm['name'] ?>.php" class="tile">
                 <span class="title"><?php echo $perm['icon'] ?> </span>

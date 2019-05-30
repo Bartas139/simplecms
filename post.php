@@ -157,40 +157,10 @@ if(!empty($_POST) && (@$_POST['action']=='insert')){
 
 function deep_level_comments ($id, $response) {
     global $db;
-        $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to = ?');
+        $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to = ?');
     $query->execute(array($id, $response));
     $comments = $query->fetchALL(PDO::FETCH_ASSOC);
-    foreach ($comments as $comment) {
-            ?>
-            <div class="single-post-comment media p-3">
-                <i class="fas fa-user" style="width:60px;"></i>
-              
-              <div class="media-body">
-                <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo 'Tento uživatel byl smazán';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
-                <?php
-                if(isset($_SESSION["user_id"])){
-                    $access = perm ('manage_comments', $_SESSION['user_role']);
-                    if (($_SESSION['user_id']==$comment['author']) || $access==1){
-                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=edit">Upravit | </a>';
-                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=delete">Odstranit | </a>';
-                    }
-                    echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=response">Odpovědět </a>';
-                }?>
-                <p><?php echo $comment['content']; ?></p>
-                <?php deep_level_comments ($id, $comment['id']); ?>
-              </div>
-            </div>
-            <?php    
-            }     
-    }
-
-//rekurzivní výpis komentářů
-function comments ($id) {
-    global $db;
-    
-    $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to IS NULL');
-    $query->execute(array($id));
-    $comments = $query->fetchALL(PDO::FETCH_ASSOC);
+    var_dump($comments);
     foreach ($comments as $comment) {
             ?>
             <div class="single-post-comment media p-3">
@@ -209,6 +179,43 @@ function comments ($id) {
                 }?>
                 <p><?php echo $comment['content']; ?></p>
                 <?php deep_level_comments ($id, $comment['id']); ?>
+              </div>
+            </div>
+            <?php    
+            }     
+    }
+
+//rekurzivní výpis komentářů
+function comments ($id, $response) {
+    global $db;
+    
+    if (is_null($response)){
+        $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to IS NULL');
+        $query->execute(array($id));
+        $comments = $query->fetchALL(PDO::FETCH_ASSOC);
+    } else {
+        $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to = ?');
+        $query->execute(array($id, $response));
+        $comments = $query->fetchALL(PDO::FETCH_ASSOC);
+    }
+    foreach ($comments as $comment) {
+            ?>
+            <div class="single-post-comment media p-3">
+                <img src="uploads/default_user.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+              
+              <div class="media-body">
+                <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo '<span class="deleted-user">Tento uživatel byl smazán</span>';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
+                <?php
+                if(isset($_SESSION["user_id"])){
+                    $access = perm ('manage_comments', $_SESSION['user_role']);
+                    if (($_SESSION['user_id']==$comment['author']) || $access==1){
+                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=edit">Upravit</a> | ';
+                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=delete">Odstranit</a> | ';
+                    }
+                    echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=response">Odpovědět</a>';
+                }?>
+                <p><?php echo $comment['content']; ?></p>
+                <?php comments ($id, $comment['id']); ?>
               </div>
             </div>
             <?php    
@@ -258,9 +265,9 @@ function comments ($id) {
             <?php $query = $db->prepare('SELECT COUNT(id) FROM comments WHERE post_id=?');
                 $query->execute(array($_GET['id']));
                 $count = $query->fetchColumn();
-                if ($count==0){echo 'Buď první, kdo tento příspvěk okomentuje.';} else {echo 'Tento příspěvek má již: ' . $count . ' komentářů';}
+                if ($count==0){echo 'Buď první, kdo tento příspvěk okomentuje.';} else {echo 'Počet komentářů u tohoto příspěvku' . $count ;}
             ?>
-            <?php comments ($_GET['id']); ?>
+            <?php comments ($_GET['id'], null); ?>
             <?php
                 if (!empty(@$_GET['comment']) && (@$_GET['action']=='response')){
                     $query = $db->prepare('SELECT users.name, comments.content FROM comments JOIN users ON comments.author=users.id WHERE comments.id=?');

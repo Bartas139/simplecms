@@ -3,6 +3,7 @@
 session_start();
 
 require 'assets/db.php';
+require_once __DIR__ . '/assets/php-graph-sdk-5.x/src/Facebook/autoload.php';
 	
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
@@ -23,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if (isset($_SESSION['source'])){
 				header("Location: ". $_SESSION['source']);	
 			} else {
-				header('Location: index.php');
+				header('Location: '.BASE_PATH.'/index.php');
 			}
 			
 	
@@ -34,6 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}		
 	
 }
+
+$fb = new Facebook\Facebook([
+  'app_id' => '2422157794674442', // Replace {app-id} with your app id
+  'app_secret' => 'b5f88c5a0a4dd23eba95dd98413cee9e',
+  'default_graph_version' => 'v3.2',
+  ]);
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['email'];
+$loginUrl = $helper->getLoginUrl('https://eso.vse.cz/~cham09/cms/assets/fb_callback.php', $permissions);
 
 ?><!DOCTYPE html>
 
@@ -48,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <?php include 'navbar.php'; ?>
 <?php echo (!empty($error)?'<div class="alert alert-danger"><strong>'.$error.'</strong></div>':'');?>
+<?php echo (!empty($_SESSION['fcb_errors'])?'<div class="alert alert-danger"><strong>'.$_SESSION['fcb_errors'].'</strong></div>':'');?>
 <div class="container full-screen d-flex">
 	
 	<div class="mx-auto card bg-light justify-content-center align-self-center sign-form">
@@ -55,8 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			<h4 class="card-title mt-3 text-center">Přihlášení</h4>
 			<p class="text-center">Přihlaste se pomocí svého účtu, nebo přes Facebook</p>
 			<p>
-				<a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Přihlásit přes Facebook</a>
-			</p>
+				<a href="<?php echo htmlspecialchars($loginUrl) ?>" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Registrovat přes Facebook</a>			</p>
 			<p class="divider-text">
         		<span class="bg-light">Nebo</span>
     		</p>
@@ -80,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	        <button type="submit" class="btn btn-primary btn-block">Přihlásit k účtu</button>
 	    </div> <!-- form-group// -->      
 	    
-	    <p class="text-center">Ještě nejste registrovaní? <a href="signup.php">Zaregistrujte se</a> </p>                                                                 
+	    <p class="text-center">Ještě nejste registrovaní? <a href="signup.php">Zaregistrujte se</a> Neznáte své heslo? <a href="lost-password.php?step=1">Obnovte ho!</a></p>                                                              
 </form>
 </article>
 </div> <!-- card.// -->
