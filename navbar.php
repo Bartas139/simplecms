@@ -1,4 +1,8 @@
-
+<?php
+$query = $db->prepare('SELECT id, name FROM categories ORDER BY name ASC');
+$query->execute();
+$categories = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
         <a class="navbar-brand" href="#">SimpleCMS</a>
@@ -16,6 +20,20 @@
 
                     }
                     ?>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Kategorie
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <?php
+                    foreach ($categories as $category) { ?>
+                        
+                            <?php echo '<a class="dropdown-item" href="'.BASE_PATH.'/category.php?id='.$category['id'].'">'.htmlspecialchars($category['name']).'</a>'; ?>        
+                          
+                    <?php }
+                    ?>
+                    </div> 
                 </li>
             </ul>
             <ul class="navbar-nav">
