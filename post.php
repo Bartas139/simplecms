@@ -6,7 +6,7 @@ require 'assets/db.php';
 require 'assets/check_perm.php';
 
 if (!isset($_GET['id'])) {
-    header('Location: ./');
+    header('Location: '.BASE_PATH);
 } else {
     $query = $db->prepare('SELECT id FROM posts WHERE id=?');
     $query->execute(array($_GET['id']));
@@ -35,15 +35,9 @@ if (!isset($_SESSION['visited'])){
     }
 }
 
-$query = $db->prepare('SELECT id, title, content, thumb_img, author, category, published, read_count FROM posts WHERE id=? LIMIT 1');
+$query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.thumb_img, posts.category, posts.published, posts.read_count, users.name as author, categories.name FROM posts JOIN users on posts.author=users.id JOIN categories on posts.category = categories.id WHERE posts.id=? LIMIT 1');
 $query->execute(array($_GET['id']));
 $post = $query->fetch(PDO::FETCH_ASSOC);
-$query = $db->prepare('SELECT name FROM users WHERE id=?');
-            $query->execute(array($post['author']));
-            $author = $query->fetchColumn();
-            $query = $db->prepare('SELECT name FROM categories WHERE id=?');
-            $query->execute(array($post['category']));
-            $category = $query->fetchColumn();
 
 if (date("d.m.Y") == date( 'd.m.Y', strtotime($post['published']))){
                                         $published = 'Dnes v ' . date( 'H:i:s', strtotime($post['published']));
@@ -155,36 +149,6 @@ if(!empty($_POST) && (@$_POST['action']=='insert')){
 
     }
 
-function deep_level_comments ($id, $response) {
-    global $db;
-        $query = $db->prepare('SELECT comments.id, comments.content, comments.response_to, comments.comment_date, comments.author, users.name FROM comments LEFT JOIN users on comments.author=users.id WHERE comments.post_id=? AND comments.response_to = ?');
-    $query->execute(array($id, $response));
-    $comments = $query->fetchALL(PDO::FETCH_ASSOC);
-    var_dump($comments);
-    foreach ($comments as $comment) {
-            ?>
-            <div class="single-post-comment media p-3">
-                <i class="fas fa-user" style="width:60px;"></i>
-              
-              <div class="media-body">
-                <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo '<span class="deleted-user">Tento uživatel byl smazán</span>';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
-                <?php
-                if(isset($_SESSION["user_id"])){
-                    $access = perm ('manage_comments', $_SESSION['user_role']);
-                    if (($_SESSION['user_id']==$comment['author']) || $access==1){
-                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=edit">Upravit | </a>';
-                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=delete">Odstranit | </a>';
-                    }
-                    echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=response">Odpovědět </a>';
-                }?>
-                <p><?php echo $comment['content']; ?></p>
-                <?php deep_level_comments ($id, $comment['id']); ?>
-              </div>
-            </div>
-            <?php    
-            }     
-    }
-
 //rekurzivní výpis komentářů
 function comments ($id, $response) {
     global $db;
@@ -253,7 +217,7 @@ function comments ($id, $response) {
                             echo 'alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
                             ?>>
         <h1><?php echo htmlspecialchars($post['title'])  ?></h1>
-        <p><?php echo 'Autor: ' . htmlspecialchars($author) . ' | Publikováno: ' .$published. ' | <a href="' . BASE_PATH. '/category.php?id=' .$post['category'] . '">Kategorie: '.htmlspecialchars($category).'</a> | Počet zobrazení: ' . $post['read_count'] ?></p>
+        <p><?php echo 'Autor: ' . htmlspecialchars($post['author']) . ' | Publikováno: ' .$published. ' | <a href="' . BASE_PATH. '/category.php?id=' .$post['category'] . '">Kategorie: '.htmlspecialchars($post['name']).'</a> | Počet zobrazení: ' . $post['read_count'] ?></p>
     </div>
 </header>   
 <main class="container">
@@ -300,7 +264,7 @@ function comments ($id, $response) {
         </article>
         <aside class="col-sm-3 offset-sm-1 single-post-aside">
             <div class="single-post-aside-panel">
-                <h2>Nejčtenější v kategorii: <?php echo htmlspecialchars($category) ?></h2>
+                <h2>Nejčtenější v kategorii: <?php echo htmlspecialchars($post['category']) ?></h2>
                 <ul class="list-unstyled">
                 <?php
                     //Nejčtenější v kategorii

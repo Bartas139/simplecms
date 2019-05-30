@@ -93,7 +93,9 @@ $postonpage = 3;
                         </div>
 				  		<div class="post-excerp">
 				  		<?php
-				  			echo strip_tags(implode(' ', array_slice(explode(' ', $post['content']), 0, 80))) . '...<br />';
+				  		//striptags odstraní tagy (protože tam můžou být=>tinymce), explode rozdělí string na pole podle slov, arrayslice ho omezí na 40, implode složí pole zase do stringu,
+				  			$excerpt = strip_tags ($post['content']);
+				  			echo implode(' ', array_slice(explode(' ', $excerpt), 0, 40)) . '...<br />';
 				  		?>	
 				  		</div>
 				  		<a href="<?php echo BASE_PATH.'/post.php?id='.$post['id'] ?>" class="post-read">Číst víc</a>

@@ -199,10 +199,10 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
 
                                                     foreach ($roles as $role){
                                                         if ($role["name"]==$currentrole){
-                                                        echo '<option selected value="'.$role["id"].'">'. $role["name"].'</option>';
+                                                        echo '<option selected value="'.$role["id"].'">'. htmlspecialchars($role["name"]).'</option>';
                                                         }
                                                         else {
-                                                        echo '<option value="'.$role["id"].'">'. $role["name"].'</option>';  
+                                                        echo '<option value="'.$role["id"].'">'. htmlspecialchars($role["name"]).'</option>';  
                                                         }
                                                     }    
                                                 ?>
@@ -236,7 +236,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
                                                     $roles = $query->fetchALL(PDO::FETCH_ASSOC);
 
                                                     foreach ($roles as $role){
-                                                        echo '<option value="'.$role["id"].'">'. $role["name"].'</option>';  
+                                                        echo '<option value="'.$role["id"].'">'. htmlspecialchars($role["name"]).'</option>';  
                                                     }    
                                                 ?>
                                             </select>
