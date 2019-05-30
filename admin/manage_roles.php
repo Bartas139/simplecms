@@ -148,7 +148,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 	<?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
 	<div id="roles">
 	<?php
-        $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
+        $query = $db->prepare('SELECT name, id FROM roles ORDER BY name;');
         $query->execute();
         $roles = $query->fetchALL(PDO::FETCH_ASSOC);
         foreach ($roles as $role){
@@ -175,7 +175,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
 		            echo '</div>';
 	        	}
 	        	
-	        	$query = $db->prepare('SELECT * from Permissions WHERE (id, name) NOT IN (SELECT permissions.id, permissions.name FROM Permissions RIGHT JOIN role_perm ON permissions.id=role_perm.perm_id WHERE (role_perm.role_id=?))');
+	        	$query = $db->prepare('SELECT name, id, description from Permissions WHERE (id, name) NOT IN (SELECT permissions.id, permissions.name FROM Permissions RIGHT JOIN role_perm ON permissions.id=role_perm.perm_id WHERE (role_perm.role_id=?))');
 	        	$query->execute(array($role["id"]));
 	        	$permissions = $query->fetchALL(PDO::FETCH_ASSOC);
 	        	echo '<h3>Dostupná oprávnění </h3>';
@@ -207,7 +207,7 @@ if(!empty($_POST) && (@$_POST['action']=='create')){
                         <input type="text" name="addname" id="addname" class="form-control" value="<?php echo htmlspecialchars(@$_POST['addname']) ?>" required />
                     </div>
                     <?php
-					$query = $db->prepare('SELECT * from Permissions');
+					$query = $db->prepare('SELECT name, id, description from Permissions');
 						        	$query->execute();
 						        	$permissions = $query->fetchALL(PDO::FETCH_ASSOC);
 						        	echo '<br />Dostupná oprávnění <br />';

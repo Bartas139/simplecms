@@ -193,7 +193,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
                                             <label for="role<?php echo $user['id']; ?>">Role uživatele</label>
                                             <select class="form-control" id="role<?php echo $user['id']; ?>" name="role" size="<?php echo $rolecount; ?>" required>
                                             <?php
-                                                    $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
+                                                    $query = $db->prepare('SELECT id, name FROM roles ORDER BY name;');
                                                     $query->execute();
                                                     $roles = $query->fetchALL(PDO::FETCH_ASSOC);
 
@@ -231,7 +231,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
                                             <label for="role">Role uživatele</label>
                                             <select class="form-control" id="role" name="role" size="<?php echo $rolecount; ?>" required>
                                             <?php
-                                                    $query = $db->prepare('SELECT * FROM roles ORDER BY name;');
+                                                    $query = $db->prepare('SELECT id, name FROM roles ORDER BY name;');
                                                     $query->execute();
                                                     $roles = $query->fetchALL(PDO::FETCH_ASSOC);
 
