@@ -26,7 +26,7 @@ $categories = $query->fetchAll(PDO::FETCH_ASSOC);
                     <?php
                     foreach ($categories as $category) { ?>
                         
-                            <?php echo '<a class="dropdown-item" href="'.BASE_PATH.'/category.php?id='.$category['id'].'">'.htmlspecialchars($category['name']).'</a>'; ?>        
+                            <?php echo '<a class="dropdown-item" href="'.BASE_PATH.'/kategorie/'.$category['id'].'">'.htmlspecialchars($category['name']).'</a>'; ?>        
                           
                     <?php }
                     ?>

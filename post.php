@@ -165,7 +165,7 @@ function comments ($id, $response) {
     foreach ($comments as $comment) {
             ?>
             <div class="single-post-comment media p-3">
-                <img src="uploads/default_user.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+                <img src="<?php echo BASE_PATH ?>/uploads/default_user.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
               
               <div class="media-body">
                 <h4><?php if(!empty($comment['name'])){echo htmlspecialchars($comment['name']);}else{echo '<span class="deleted-user">Tento uživatel byl smazán</span>';} ?> <small><i><?php echo htmlspecialchars($comment['comment_date']); ?></i></small></h4>
@@ -217,7 +217,7 @@ function comments ($id, $response) {
                             echo ' alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
                             ?>>
         <h1><?php echo htmlspecialchars($post['title'])  ?></h1>
-        <p><?php echo 'Autor: ' . htmlspecialchars($post['author']) . ' | Publikováno: ' .$published. ' | <a href="' . BASE_PATH. '/category.php?id=' .$post['category'] . '">Kategorie: '.htmlspecialchars($post['name']).'</a> | Počet zobrazení: ' . $post['read_count'] ?></p>
+        <p><?php echo 'Autor: ' . htmlspecialchars($post['author']) . ' | Publikováno: ' .$published. ' | <a href="' . BASE_PATH. '/kategorie/' .$post['category'] . '">Kategorie: '.htmlspecialchars($post['name']).'</a> | Počet zobrazení: ' . $post['read_count'] ?></p>
     </div>
 </header>   
 <main class="container">
@@ -272,7 +272,7 @@ function comments ($id, $response) {
                     $query->execute(array($post['category']));
                     $mostread = $query->fetchALL(PDO::FETCH_ASSOC);
                     foreach ($mostread as $mostreadpost) {
-                            echo '<li><a href="'.BASE_PATH.'/post.php?id='.$mostreadpost['id'] . '">';
+                            echo '<li><a href="'.BASE_PATH.'/clanek/'.$mostreadpost['id'] . '/'.$mostreadpost['title'].'">';
                             echo '<span class="fas fa-angle-double-right text-primary"></span> ';
                             echo htmlspecialchars($mostreadpost['title']) . '<br/>';
                             echo '</a></li>';

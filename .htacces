@@ -1,0 +1,5 @@
+ErrorDocument 404 /errors/404.php
+ErrorDocument 403 /errors/403.php
+
+RewriteEngine on
+RewriteRule ^clanek-(.*)-(.*) post.php?id=$1&title=$2

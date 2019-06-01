@@ -65,7 +65,7 @@ $postonpage = 3;
         	<div class="col-sm-4 py-2">
 	        	<article class="card post h-100">
 				  	<div class="post-header">
-				  		<a href="<?php echo BASE_PATH.'/post.php?id='.$post['id'] ?>"><img class="card-img-top thumbnail" <?php
+				  		<a href="<?php echo BASE_PATH.'/clanek/'.$post['id'] . '/' . htmlspecialchars($post['title']); ?>"><img class="card-img-top thumbnail" <?php
 				  			if (empty($post['thumb_img'])){
 				  				echo 'src="'.BASE_PATH.'/uploads/thumbs/default.png"';	
 				  			} else {
@@ -73,10 +73,10 @@ $postonpage = 3;
 				  			}
 				  			echo ' alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
 				  			?>></a>
-				  		<div class="post-category"><a href="<?php echo BASE_PATH.'/category.php?id='.$post['category'] ?>"><?php echo htmlspecialchars($category) ?></a></div>
+				  		<div class="post-category"><a href="<?php echo BASE_PATH.'/kategorie/'.$post['category'] ?>"><?php echo htmlspecialchars($category) ?></a></div>
 				  	</div>
 				  	<div class="card-body">
-				  		<h3 class="post-title"><a href="<?php echo BASE_PATH.'/post.php?id='.$post['id'] ?>"><?php echo htmlspecialchars($post['title']) ?></a></h3>
+				  		<h3 class="post-title"><a href="<?php echo BASE_PATH.'/clanek/'.$post['id'] . '/' . htmlspecialchars($post['title']); ?>"><?php echo htmlspecialchars($post['title']) ?></a></h3>
 				  		<div class="post-meta">
                             <ul>
                                 <li><?php echo htmlspecialchars($author) ?></li>
@@ -98,7 +98,7 @@ $postonpage = 3;
 				  			echo implode(' ', array_slice(explode(' ', $excerpt), 0, 40)) . '...<br />';
 				  		?>	
 				  		</div>
-				  		<a href="<?php echo BASE_PATH.'/post.php?id='.$post['id'] ?>" class="post-read">Číst víc</a>
+				  		<a href="<?php echo BASE_PATH.'/clanek/'.$post['id'] . '/' . htmlspecialchars($post['title']); ?>" class="post-read">Číst víc</a>
 				  	</div>
 				</article>
 			</div>
