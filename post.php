@@ -264,11 +264,11 @@ function comments ($id, $response) {
         </article>
         <aside class="col-sm-3 offset-sm-1 single-post-aside">
             <div class="single-post-aside-panel">
-                <h2>Nejčtenější v kategorii: <?php echo htmlspecialchars($post['category']) ?></h2>
+                <h2>Nejčtenější v kategorii: <?php echo htmlspecialchars($post['name']) ?></h2>
                 <ul class="list-unstyled">
                 <?php
                     //Nejčtenější v kategorii
-                    $query = $db->prepare('SELECT id, title, category FROM posts WHERE category=? ORDER BY read_count DESC LIMIT 2');
+                    $query = $db->prepare('SELECT id, title FROM posts WHERE category=? ORDER BY read_count DESC LIMIT 2');
                     $query->execute(array($post['category']));
                     $mostread = $query->fetchALL(PDO::FETCH_ASSOC);
                     foreach ($mostread as $mostreadpost) {
