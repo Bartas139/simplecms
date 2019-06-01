@@ -124,7 +124,7 @@ if(!empty($_POST) && (@$_POST['action']=='edit')){
             </thead>
             <?php
         foreach ($categories as $category){
-            $query = $db->prepare('SELECT COUNT(category) FROM posts WHERE id=?');
+            $query = $db->prepare('SELECT COUNT(id) FROM posts WHERE category=?');
             $query->execute(array($category['id']));
             $postcount = $query->fetchColumn();
 
