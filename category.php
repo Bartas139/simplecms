@@ -110,7 +110,7 @@ $name = $query->fetchColumn();
         if (($html_row % 3) != 0) {echo '</div>';}
     ?>
 </main>
-
+<?php include 'assets/footer.php'; ?>
 <?php include 'assets/scripts.php'; ?>
         </body>
 

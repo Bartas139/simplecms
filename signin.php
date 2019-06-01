@@ -97,6 +97,7 @@ $loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback
 </div> <!-- card.// -->
  
 </div> 
+<?php include 'assets/footer.php'; ?>
 <?php include 'assets/scripts.php'; ?>	
 
 </body>

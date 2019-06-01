@@ -242,7 +242,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (@$_POST['action']=='change-password
 	echo '<script type="text/javascript">
    window.location = "' .BASE_PATH.'/signin.php"
 </script>';
-}include 'assets/scripts.php'; ?>	
+}
+include 'assets/footer.php';
+include 'assets/scripts.php'; ?>	
 
 </body>
 

@@ -174,3 +174,10 @@ header {
 #yes {
     display: none;
 }
+
+footer {
+    background-color: #0074D9;
+    height: 35px;
+    color: white;
+    margin-top: 20px;
+}

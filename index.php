@@ -116,7 +116,7 @@ $postonpage = 3;
 		</ul>
 
 </div>
-
+<?php include 'assets/footer.php'; ?>
 <?php include 'assets/scripts.php'; ?>
 		</body>
 
