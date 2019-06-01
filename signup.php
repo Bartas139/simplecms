@@ -58,8 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$hashed = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		
 		#vlozime usera do databaze
-		$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?)");
-		$stmt->execute(array($_POST['nick'], $_POST['email'], $hashed));
+		$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?, ?)");
+		$stmt->execute(array($_POST['nick'], $_POST['email'], $hashed, BASE_ROLE));
 		
 		#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
 		
