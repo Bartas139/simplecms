@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && (@$_POST['action']=='change-password
 			<h4 class="card-title mt-3 text-center">Obnovení hesla (Krok 1/2)</h4>
 			<p class="text-center">Zadejte váš registrační email</p>
 	
-	<form action="" method="POST">
+	<form method="POST">
 		<input type="hidden" name="action" value="generate-token" />
 		<div class="form-group input-group">
 			<div class="input-group-prepend">

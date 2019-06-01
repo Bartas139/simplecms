@@ -72,7 +72,7 @@ $loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback
         		<span class="bg-light">Nebo</span>
     		</p>
 	
-	<form action="" method="POST">
+	<form method="POST">
 		<div class="form-group input-group">
 			<div class="input-group-prepend">
 		    	<span class="input-group-text"> <i class="fa fa-user"></i> </span>

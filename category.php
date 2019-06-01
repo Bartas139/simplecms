@@ -72,7 +72,7 @@ $name = $query->fetchColumn();
                             } else {
                                 echo 'src="'.BASE_PATH.'/uploads/thumbs/' . $post['thumb_img'] .'"';
                             }
-                            echo 'alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
+                            echo ' alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
                             ?>></a>
                         <div class="post-category"><a href="<?php echo BASE_PATH.'/category.php?id='.$post['category'] ?>"><?php echo htmlspecialchars($post['cat']) ?></a></div>
                     </div>

@@ -214,7 +214,7 @@ function comments ($id, $response) {
                             } else {
                                 echo 'src="'.BASE_PATH.'/uploads/thumbs/' . $post['thumb_img'] .'"';
                             }
-                            echo 'alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
+                            echo ' alt="Náhledový obrázek: ' . $post['thumb_img'] . '"'; 
                             ?>>
         <h1><?php echo htmlspecialchars($post['title'])  ?></h1>
         <p><?php echo 'Autor: ' . htmlspecialchars($post['author']) . ' | Publikováno: ' .$published. ' | <a href="' . BASE_PATH. '/category.php?id=' .$post['category'] . '">Kategorie: '.htmlspecialchars($post['name']).'</a> | Počet zobrazení: ' . $post['read_count'] ?></p>
@@ -272,10 +272,10 @@ function comments ($id, $response) {
                     $query->execute(array($post['category']));
                     $mostread = $query->fetchALL(PDO::FETCH_ASSOC);
                     foreach ($mostread as $mostreadpost) {
-                            echo '<a href="'.BASE_PATH.'/post.php?id='.$mostreadpost['id'] . '">';
-                            echo '<li><span class="fas fa-angle-double-right text-primary"></span> ';
+                            echo '<li><a href="'.BASE_PATH.'/post.php?id='.$mostreadpost['id'] . '">';
+                            echo '<span class="fas fa-angle-double-right text-primary"></span> ';
                             echo htmlspecialchars($mostreadpost['title']) . '<br/>';
-                            echo '</li></a>';
+                            echo '</a></li>';
                         }    
                 ?>
                 </ul>

@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$hashed = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		
 		#vlozime usera do databaze
-		$stmt = $db->prepare("INSERT INTO users(name, email, password) VALUES (?, ?, ?, ?)");
+		$stmt = $db->prepare("INSERT INTO users(name, email, password, role) VALUES (?, ?, ?, ?)");
 		$stmt->execute(array($_POST['nick'], $_POST['email'], $hashed, BASE_ROLE));
 		
 		#ted je uzivatel ulozen, bud muzeme vzit id posledniho zaznamu pres last insert id (co kdyz se to potka s vice requesty = nebezpecne), nebo nacist uzivatele podle mailove adresy (ok, bezpecne)
@@ -109,7 +109,7 @@ $loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback
         		<span class="bg-light">Nebo</span>
     		</p>
 	
-	<form action="" method="POST">
+	<form method="POST">
 		<div class="form-group input-group">
 			<div class="input-group-prepend">
 		    	<span class="input-group-text"> <i class="fa fa-user"></i> </span>
