@@ -17,7 +17,7 @@ if ($access == 0){
     die();
 }
 //update příspěvku
-if(!empty($_POST) && (@$_POST['action']=='update')){
+if(!empty($_POST) && (@$_POST['action']=='edit')){
     $errors="";
 
     if (empty($_POST["title"])){
@@ -164,9 +164,12 @@ if (isset($_POST['delimg'])){
 
 
          if (empty($errors)) {
-            $stmt = $db->prepare("UPDATE posts SET title=?, content=?, thumb_img=?, category=? WHERE id=?");
-            $stmt->execute(array($_POST["title"], $_POST["content"], $newname, $_POST["cat"], $_GET['id']));
+
+
+            $stmt = $db->prepare("UPDATE posts SET title=?, content=?, thumb_img=?, category=?, locked = ?, locked_user = ? WHERE id=?");
+            $stmt->execute(array($_POST["title"], $_POST["content"], $newname, $_POST["cat"], null, null, $_GET['id']));
             header('Location: edit_post.php');
+            die ();
         }
 
     }
@@ -375,20 +378,36 @@ if($_FILES['fileToUpload']['size'] > 0) {
     </div>
     <?php }
         if(!empty($_GET) && (@$_GET['action']=='edit') ) {
-            $query = $db->prepare('SELECT id, title, content, thumb_img, author, category, published, read_count FROM posts WHERE id=?');
+            $query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.thumb_img, posts.author, posts.category, posts.published, posts.read_count, categories.name as currentcat FROM posts JOIN categories ON posts.category = categories.id WHERE posts.id=?');
             $query->execute(array($_GET['id']));
             $post = $query->fetch(PDO::FETCH_ASSOC);
 
-            $query = $db->prepare('SELECT name FROM categories WHERE id=?');
-            $query->execute(array($post['category']));
-            $currentcat = $query->fetchColumn();
+            //Kdyby např, někdo mezitím záznam smazal
+            if (empty($post)){ echo 'Tento příspěvek neexistuje'; }
+            else {
+
+                $query = $db->prepare('SELECT posts.locked + INTERVAL 15 MINUTE AS expires, posts.locked_user, users.name FROM posts JOIN users ON posts.locked_user = users.id WHERE posts.id=?');
+                $query->execute(array($_GET['id']));
+                $lock = $query->fetch();
+
+                if (date("Y-m-d H:i:s") < date( 'Y-m-d H:i:s', strtotime($lock['expires'])) && $lock['locked_user']!=$_SESSION['user_id']){
+                    echo 'Tento záznam v současné době upravuje: ' . $lock['name'] . ', expirace zámku je v tuto chvíli nastavena na: '.date( 'd.m.Y H:i:s', strtotime($lock['expires'])).'<br /><a href="edit_post.php">Vrátit se zpět</a>';
+                } else {
+
+                $stmt = $db->prepare("UPDATE posts SET locked_user=?, locked=NOW() WHERE id=?");
+                $stmt->execute(array($_SESSION['user_id'], $_GET['id']));
+
+                $query = $db->prepare('SELECT posts.locked + INTERVAL 15 MINUTE AS expires FROM posts WHERE posts.id=?');
+                $query->execute(array($_GET['id']));
+                $lock = $query->fetch();   
 
             $query = $db->prepare('SELECT COUNT(name) FROM categories');
             $query->execute();
             $catcount = $query->fetchColumn();
             ?><?php echo (!empty($errors)?'<div class="alert alert-danger"><strong>'.$errors.'</strong></div>':'');?>
+                                        <div class="alert alert-danger">Záznam je pro ostatní uživatele uzamčen do: <?php echo date( 'd.m.Y H:i:s', strtotime($lock['expires'])); ?></div>
                                         <form method="post" enctype="multipart/form-data">
-                                            <input type="hidden" name="action" value="update" />
+                                            <input type="hidden" name="action" value="edit" />
                                             
                                             <div class="row">
                                                 <div class="col-sm-6">
@@ -402,7 +421,7 @@ if($_FILES['fileToUpload']['size'] > 0) {
                                                             $cats = $query->fetchALL(PDO::FETCH_ASSOC);
 
                                                             foreach ($cats as $cat){
-                                                                if ($cat["name"]==$currentcat){
+                                                                if ($cat["name"]==$post['currentcat']){
                                                                     echo '<option value="'.$cat["id"].'" selected>'. htmlspecialchars($cat["name"]).'</option>';
                                                                 } else {
                                                                     echo '<option value="'.$cat["id"].'">'. htmlspecialchars($cat["name"]).'</option>';
@@ -432,11 +451,11 @@ if($_FILES['fileToUpload']['size'] > 0) {
                                             <textarea name="content" id="content" class="form-control" value="<?php echo htmlspecialchars($post['content']) ?>"><?php echo htmlspecialchars($post['content']) ?></textarea>
                                             
                                             <input type="submit" name="submit" value="Publikovat" class="btn btn-primary send"/>
-                                            <a href="edit_post.php">Zrušit a vrátit se na přehled</a>
+                                            <a href="unlock.php?id=<?php echo $_GET['id'] ?>">Zrušit a vrátit se na přehled</a>
                                         </form>
             <?php
+        }}
         }
-
     ?>
 
 </div>

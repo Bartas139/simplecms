@@ -174,7 +174,7 @@ function comments ($id, $response) {
                     $access = perm ('manage_comments', $_SESSION['user_role']);
                     if (($_SESSION['user_id']==$comment['author']) || $access==1){
                         echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=edit">Upravit</a> | ';
-                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=delete">Odstranit</a> | ';
+                        echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=delete" onclick="return confirm(\'Přejete si smazat komentář\')">Odstranit</a> | ';
                     }
                     echo '<a href="' . BASE_PATH. '/post.php?id=' .$id . '&comment='. $comment['id'] .'&action=response">Odpovědět</a>';
                 }?>

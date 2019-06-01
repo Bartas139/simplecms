@@ -12,7 +12,7 @@ function perm($perm, $current_role){
 		$result = 1;
 	} else {
 
-		$stmt = $db->prepare("SELECT id FROM role_perm JOIN permissions ON role_perm.perm_id=permissions.id WHERE permissions.name = ? AND role_perm.role_id = ?");
+		$stmt = $db->prepare("SELECT role_perm.id FROM role_perm JOIN permissions ON role_perm.perm_id=permissions.id WHERE permissions.name = ? AND role_perm.role_id = ?");
 		$stmt->execute(array($perm, $current_role));
 		$result = $stmt->fetch();
 	

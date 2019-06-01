@@ -37,14 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $fb = new Facebook\Facebook([
-  'app_id' => '2422157794674442', // Replace {app-id} with your app id
-  'app_secret' => 'b5f88c5a0a4dd23eba95dd98413cee9e',
+  'app_id' => '2216515835051068', // Replace {app-id} with your app id
+  'app_secret' => '58baf11e44c78f02f85d8dc91fdea43d',
   'default_graph_version' => 'v3.2',
   ]);
 
 $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email'];
-$loginUrl = $helper->getLoginUrl('https://eso.vse.cz/~cham09/cms/assets/fb_callback.php', $permissions);
+$loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback.php', $permissions);
 
 ?><!DOCTYPE html>
 

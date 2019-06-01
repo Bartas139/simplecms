@@ -5,7 +5,7 @@ $categories = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-        <a class="navbar-brand" href="#">SimpleCMS</a>
+        <a class="navbar-brand" href="<?php echo BASE_PATH; ?>">SimpleCMS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,12 +13,9 @@ $categories = $query->fetchAll(PDO::FETCH_ASSOC);
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <?php
-                    if (basename(getcwd())=='admin'){
-                        echo'<a class="nav-link" href="../">Domů</a>';
-                    } else {
-                        echo'<a class="nav-link" href="./">Domů</a>';
-
-                    }
+                    
+                        echo'<a class="nav-link" href="'. BASE_PATH . '">Domů</a>';
+                    
                     ?>
                 </li>
                 <li class="nav-item dropdown">
