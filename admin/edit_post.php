@@ -33,7 +33,7 @@ if (isset($_POST['delimg'])){
                 $query->execute(array($_GET['id']));
                 $filename = $query->fetchColumn();
                 $path = '../uploads/thumbs/' . $filename;
-                unlink($filename);
+                unlink($path);
     if($_FILES['fileToUpload']['size'] > 0) {
                 //Nahrání obrázku
                 $target_dir = "../uploads/thumbs/";
@@ -294,7 +294,7 @@ if($_FILES['fileToUpload']['size'] > 0) {
         </div>
     </form>
 	<?php
-        $query = $db->prepare('SELECT id, title, author, category, published, read_count FROM posts');
+        $query = $db->prepare('SELECT id, title, author, category, published, read_count FROM posts ORDER BY published DESC');
         $query->execute();
         $posts = $query->fetchALL(PDO::FETCH_ASSOC);
 

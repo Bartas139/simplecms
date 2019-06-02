@@ -20,7 +20,7 @@ if (!isset($_GET['id'])) {
 //Odkud jsi přišel - požito pro případný návrat po přihlášení
 $_SESSION['source'] = $_SERVER['REQUEST_URI'];
 
-$query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.thumb_img, posts.category, posts.published, posts.read_count, users.name, categories.name as cat FROM posts JOIN users on posts.author=users.id JOIN categories on posts.category = categories.id WHERE categories.id=?');
+$query = $db->prepare('SELECT posts.id, posts.title, posts.content, posts.thumb_img, posts.category, posts.published, posts.read_count, users.name, categories.name as cat FROM posts JOIN users on posts.author=users.id JOIN categories on posts.category = categories.id WHERE categories.id=? ORDER BY posts.published DESC');
 $query->execute(array($_GET['id']));
 $posts = $query->fetchALL(PDO::FETCH_ASSOC);
 
