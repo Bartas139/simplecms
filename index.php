@@ -34,7 +34,7 @@ $postonpage = 3;
 		<p>Základní CMS vytvořeno v rámci kurzu 4iz278</p>
 	</div>
 </header>	
-<div class="container">
+<main class="container">
 	<h2>Poslední příspěvky</h2>
 	
 	<?php
@@ -115,7 +115,7 @@ $postonpage = 3;
 	  		<?php } ?>
 		</ul>
 
-</div>
+</main>
 <?php include 'assets/footer.php'; ?>
 <?php include 'assets/scripts.php'; ?>
 		</body>

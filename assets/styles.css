@@ -175,9 +175,25 @@ header {
     display: none;
 }
 
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    padding-bottom: 45px;
+}
+
 footer {
     background-color: #0074D9;
-    height: 35px;
     color: white;
-    margin-top: 20px;
+    height: 45px;
+    text-align: center;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
 }
+

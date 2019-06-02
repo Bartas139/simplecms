@@ -60,7 +60,7 @@ $loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback
 <?php include 'navbar.php'; ?>
 <?php echo (!empty($error)?'<div class="alert alert-danger"><strong>'.$error.'</strong></div>':'');?>
 <?php echo (!empty($_SESSION['fcb_errors'])?'<div class="alert alert-danger"><strong>'.$_SESSION['fcb_errors'].'</strong></div>':'');?>
-<div class="container full-screen d-flex">
+<main class="container full-screen d-flex">
 	
 	<div class="mx-auto card bg-light justify-content-center align-self-center sign-form">
 		<article class="card-body mx-auto">
@@ -96,7 +96,7 @@ $loginUrl = $helper->getLoginUrl('https://cms.straightplay.cz/assets/fb_callback
 </article>
 </div> <!-- card.// -->
  
-</div> 
+</main> 
 <?php include 'assets/footer.php'; ?>
 <?php include 'assets/scripts.php'; ?>	
 
