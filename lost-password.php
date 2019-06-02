@@ -73,7 +73,6 @@ if ($_GET["step"]==3 && isset($_GET["token"])) {
 		
 		$valid = true;	
 	} else {
-		echo '<br />' . date("Y-m-d H:i:s");
 		$valid = false;
 	}	
 }
